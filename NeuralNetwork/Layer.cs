@@ -204,7 +204,14 @@ namespace NeuralNetwork
         {
             for (int i = 0; i < targets.Length; i++)
             {
-                //E[i, 0] = Math.Pow(targets[i] - X[i, 0], 2);
+                //int minusPlus = 1;
+                //if (targets[i] - X[i, 0] < 0)
+                //{
+                //    minusPlus = -1;
+                //}
+
+                //E[i, 0] = Math.Pow(targets[i] - X[i, 0], 2) * minusPlus;
+
                 E[i, 0] = targets[i] - X[i, 0];
             }
         }

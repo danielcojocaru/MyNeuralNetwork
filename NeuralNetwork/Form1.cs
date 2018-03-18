@@ -99,7 +99,7 @@ namespace NeuralNetwork
         {
             List<double[]> inputs = new List<double[]>();
 
-            for (int i = 0; i < 1000000; i++)
+            for (int i = 0; i < 100000; i++)
             {
                 inputs.Add(_input1);
                 inputs.Add(_input2);
@@ -116,21 +116,21 @@ namespace NeuralNetwork
             }
         }
 
-        private void TrainNn2()
-        {
-            double[][] allInputs = { _input1, _input2, _input3, _input4 };
-            List<double[]> inputs = allInputs.ToList();
+        //private void TrainNn2()
+        //{
+        //    double[][] allInputs = { _input1, _input2, _input3, _input4 };
+        //    List<double[]> inputs = allInputs.ToList();
 
-            for (int i = 0; i < 10000; i++)
-            {
-                Shuffle(inputs);
-                foreach (double[] input in inputs)
-                {
-                    double[] answer = GetAnswer(input);
-                    nn.Train(input, answer);
-                }
-            }
-        }
+        //    for (int i = 0; i < 10000; i++)
+        //    {
+        //        Shuffle(inputs);
+        //        foreach (double[] input in inputs)
+        //        {
+        //            double[] answer = GetAnswer(input);
+        //            nn.Train(input, answer);
+        //        }
+        //    }
+        //}
 
         private double[] GetAnswer(double[] input)
         {
@@ -182,22 +182,22 @@ namespace NeuralNetwork
             }
         }
 
-        private void TrainNn1()
-        {
-            Random ran = new Random();
+        //private void TrainNn1()
+        //{
+        //    Random ran = new Random();
 
-            double[][] allInputs = { _input1, _input2, _input3, _input4 };
-            double[][] y = { new double[] { 0 }, new double[] { 1 }, new double[] { 1 }, new double[] { 0 } };
+        //    double[][] allInputs = { _input1, _input2, _input3, _input4 };
+        //    double[][] y = { new double[] { 0 }, new double[] { 1 }, new double[] { 1 }, new double[] { 0 } };
 
-            for (int i = 0; i < 10000; i++)
-            {
-                int index = ran.Next(0, 4);
-                double[] input = allInputs[index];
-                double[] answer = y[index];
+        //    for (int i = 0; i < 10000; i++)
+        //    {
+        //        int index = ran.Next(0, 4);
+        //        double[] input = allInputs[index];
+        //        double[] answer = y[index];
 
-                nn.Train(input, answer);
-            }
-        }
+        //        nn.Train(input, answer);
+        //    }
+        //}
 
         private void SetWAndB_Click(object sender, EventArgs e)
         {
