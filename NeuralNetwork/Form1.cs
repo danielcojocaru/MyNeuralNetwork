@@ -88,36 +88,18 @@ namespace NeuralNetwork
         private void RecreateNn_Click(object sender, EventArgs e)
         {
             InitializeNeuralNetwork();
-
-            //Matrix<double> m1 = Matrix<double>.Build.Dense(2, 1);
-            //Matrix<double> m2 = Matrix<double>.Build.SameAs(m1);
-            //Matrix<double> m3 = Matrix<double>.Build.Dense(2, 1);
-
-            //m1[0, 0] = 1;
-            //m1[1, 0] = 2;
-            //m2[0, 0] = 3;
-            //m2[1, 0] = 4;
-
-            //m2 = m1.Multiply(4);
-
-            //m3 = m1.Multiply(m2);
-
-            //Console.WriteLine(m1);
-            //Console.WriteLine(m2);
-            //Console.WriteLine(m3);
         }
 
         private void Train_Click(object sender, EventArgs e)
         {
             TrainNn3();
-
         }
 
         private void TrainNn3()
         {
             List<double[]> inputs = new List<double[]>();
 
-            for (int i = 0; i < 10000; i++)
+            for (int i = 0; i < 1000000; i++)
             {
                 inputs.Add(_input1);
                 inputs.Add(_input2);
