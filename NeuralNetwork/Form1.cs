@@ -9,6 +9,8 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Security.Cryptography;
+using NeuralNetwork.Model;
+using MathNet.Numerics.LinearAlgebra.Double;
 
 namespace NeuralNetwork
 {
@@ -20,13 +22,33 @@ namespace NeuralNetwork
             InitializeNeuralNetwork();
         }
 
-        private NeuralNetwork nn;
-
         private void InitializeNeuralNetwork()
         {
-            nn = new NeuralNetwork();
-            nn.Create(new int[] { 2, 2, 1 });
+            //Matrix<double> m = DenseMatrix.OfArray(new double[,] {
+            //    {   1   },
+            //    {   1   },
+            //    {   1   }});
+
+            //Console.WriteLine(m);
+
+            //Matrix < double > n = Matrix<double>.Build.Dense(4, 1);
+
+            //Console.WriteLine(n);
+
+            nn = new NeuralNetworkCls();
+            nn.Create(new int[] { 3, 3, 3, 3 });
+            nn.NnInitializer = new NnInitializerMediumDotComExample();
             nn.Initialize();
+        }
+
+        private NeuralNetworkOld nnOld;
+        private NeuralNetworkCls nn;
+
+        private void InitializeNeuralNetworkOld()
+        {
+            nnOld = new NeuralNetworkOld();
+            nnOld.Create(new int[] { 2, 2, 1 });
+            nnOld.Initialize();
         }
 
         private void Form1_Load(object sender, EventArgs e)
@@ -43,41 +65,41 @@ namespace NeuralNetwork
         {
             Matrix<double> output;
 
-            output = nn.Guess(_input1);
+            output = nnOld.Guess(_input1);
             label1.Text = output[0, 0].ToString();
 
-            output = nn.Guess(_input2);
+            output = nnOld.Guess(_input2);
             label2.Text = output[0, 0].ToString();
 
-            output = nn.Guess(_input3);
+            output = nnOld.Guess(_input3);
             label3.Text = output[0, 0].ToString();
 
-            output = nn.Guess(_input4);
+            output = nnOld.Guess(_input4);
             label4.Text = output[0, 0].ToString();
         }
 
         private void button1_Click(object sender, EventArgs e)
         {
-            nn.Train(_input1, new double[] { 0 });
-            nn.PrintToExcel();
+            nnOld.Train(_input1, new double[] { 0 });
+            nnOld.PrintToExcel();
         }
 
         private void button2_Click(object sender, EventArgs e)
         {
-            nn.Train(_input2, new double[] { 1 });
-            nn.PrintToExcel();
+            nnOld.Train(_input2, new double[] { 1 });
+            nnOld.PrintToExcel();
         }
 
         private void button3_Click(object sender, EventArgs e)
         {
-            nn.Train(_input3, new double[] { 1 });
-            nn.PrintToExcel();
+            nnOld.Train(_input3, new double[] { 1 });
+            nnOld.PrintToExcel();
         }
 
         private void button4_Click(object sender, EventArgs e)
         {
-            nn.Train(_input4, new double[] { 0 });
-            nn.PrintToExcel();
+            nnOld.Train(_input4, new double[] { 0 });
+            nnOld.PrintToExcel();
         }
 
         private void button10_Click(object sender, EventArgs e)
@@ -112,7 +134,7 @@ namespace NeuralNetwork
             foreach (double[] input in inputs)
             {
                 double[] answer = GetAnswer(input);
-                nn.Train(input, answer);
+                nnOld.Train(input, answer);
             }
         }
 
@@ -201,7 +223,7 @@ namespace NeuralNetwork
 
         private void SetWAndB_Click(object sender, EventArgs e)
         {
-            Layer l1 = nn.Layers[1];
+            LayerOld l1 = nnOld.Layers[1];
             l1.W[0, 0] = 20;
             l1.W[0, 1] = 20;
             l1.W[1, 0] = -20;
@@ -210,7 +232,7 @@ namespace NeuralNetwork
             l1.B[0, 0] = -10;
             l1.B[1, 0] = 30;
 
-            Layer l2 = nn.Layers[2];
+            LayerOld l2 = nnOld.Layers[2];
             l2.W[0, 0] = 20;
             l2.W[0, 1] = 20;
             l2.B[0, 0] = -30;
@@ -218,7 +240,7 @@ namespace NeuralNetwork
 
         private void SetAt75_Click(object sender, EventArgs e)
         {
-            Layer l1 = nn.Layers[1];
+            LayerOld l1 = nnOld.Layers[1];
             l1.W[0, 0] = 15;
             l1.W[0, 1] = 10;
             l1.W[1, 0] = -15;
@@ -227,7 +249,7 @@ namespace NeuralNetwork
             l1.B[0, 0] = -10;
             l1.B[1, 0] = 30;
 
-            Layer l2 = nn.Layers[2];
+            LayerOld l2 = nnOld.Layers[2];
             l2.W[0, 0] = 20;
             l2.W[0, 1] = 20;
             l2.B[0, 0] = -30;
@@ -235,7 +257,7 @@ namespace NeuralNetwork
 
         private void button9_Click(object sender, EventArgs e)
         {
-            nn.PrintToExcel();
+            nnOld.PrintToExcel();
         }
 
         

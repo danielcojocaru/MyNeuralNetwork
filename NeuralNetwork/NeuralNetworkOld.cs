@@ -9,13 +9,13 @@ using System.Threading.Tasks;
 
 namespace NeuralNetwork
 {
-    public class NeuralNetwork
+    public class NeuralNetworkOld
     {
-        public List<Layer> Layers { get; set; } = new List<Layer>();
-        public Layer FirstLayer { get; set; }
-        public Layer LastLayer { get; set; }
+        public List<LayerOld> Layers { get; set; } = new List<LayerOld>();
+        public LayerOld FirstLayer { get; set; }
+        public LayerOld LastLayer { get; set; }
 
-        public NeuralNetwork()
+        public NeuralNetworkOld()
         {}
 
         public void Create(int[] layers)
@@ -28,11 +28,11 @@ namespace NeuralNetwork
 
         private void CreateLayers(int[] layers)
         {
-            Layer lastLayer = null; ;
+            LayerOld lastLayer = null;
             for (int i = 0; i < layers.Length; i++)
             {
                 int nrOfOutputs = layers[i];
-                Layer layer = new Layer();
+                LayerOld layer = new LayerOld();
 
                 if (i == 0)
                 {
@@ -60,7 +60,7 @@ namespace NeuralNetwork
 
         private void RandomizeLayers()
         {
-            foreach (Layer layer in Layers)
+            foreach (LayerOld layer in Layers)
             {
                 layer.Randomize();
             }
@@ -84,7 +84,7 @@ namespace NeuralNetwork
 
             for (int i = 1; i < Layers.Count; i++)
             {
-                Layer layer = Layers[i];
+                LayerOld layer = Layers[i];
 
                 Console.WriteLine(layer.W);
                 Console.WriteLine(layer.B);

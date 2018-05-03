@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace NeuralNetwork
 {
-    public class Layer
+    public class LayerOld
     {
         #region Basic
 
@@ -18,12 +18,12 @@ namespace NeuralNetwork
         public Matrix<double> B { get; set; }
         public Matrix<double> E { get; set; }
 
-        public Layer Previous { get; set; }
-        public Layer Next { get; set; }
+        public LayerOld Previous { get; set; }
+        public LayerOld Next { get; set; }
 
         private Random rnd = new Random();
 
-        public Layer()
+        public LayerOld()
         { }
 
         public void Create(int nrOfOutputs)

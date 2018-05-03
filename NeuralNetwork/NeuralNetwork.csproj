@@ -50,14 +50,20 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Auxiliar\Enum\ResultEnum.cs" />
+    <Compile Include="Auxiliar\Interface\INeuralNetworkInitializer.cs" />
     <Compile Include="Form1.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Form1.Designer.cs">
       <DependentUpon>Form1.cs</DependentUpon>
     </Compile>
-    <Compile Include="Layer.cs" />
-    <Compile Include="NeuralNetwork.cs" />
+    <Compile Include="LayerOld.cs" />
+    <Compile Include="Model\NeuralNetwork.cs" />
+    <Compile Include="Model\Neurons.cs" />
+    <Compile Include="Model\NnInitializerMediumDotComExample.cs" />
+    <Compile Include="Model\Synapses.cs" />
+    <Compile Include="NeuralNetworkOld.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <EmbeddedResource Include="Form1.resx">
@@ -116,5 +122,6 @@
       <EmbedInteropTypes>True</EmbedInteropTypes>
     </COMReference>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
