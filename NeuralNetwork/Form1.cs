@@ -26,10 +26,13 @@ namespace NeuralNetwork
         {
             //Matrix<double> m = DenseMatrix.OfArray(new double[,] {
             //    {   1   },
-            //    {   1   },
+            //    {   0   },
             //    {   1   }});
 
             //Console.WriteLine(m);
+            //m = m - 1;
+
+            //Console.WriteLine(m.L1Norm());
 
             //Matrix < double > n = Matrix<double>.Build.Dense(4, 1);
 
@@ -39,6 +42,7 @@ namespace NeuralNetwork
             nn.Create(new int[] { 3, 3, 3, 3 });
             nn.NnInitializer = new NnInitializerMediumDotComExample();
             nn.Initialize();
+            nn.Forward(new double[] { 0.1, 0.2, 0.7}, new double[] { 1, 0, 0 });
         }
 
         private NeuralNetworkOld nnOld;

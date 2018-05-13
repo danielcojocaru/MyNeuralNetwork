@@ -30,17 +30,11 @@ namespace NeuralNetwork.Model
         public List<Matrix<double>> BList { get; set; } = new List<Matrix<double>>()
         {
              DenseMatrix.OfArray(new double[,] {
-                {   1   },
-                {   1   },
-                {   1   }}),
+                {   1     ,   1     ,   1       }}),
              DenseMatrix.OfArray(new double[,] {
-                {   1   },
-                {   1   },
-                {   1   }}),
+                {   1     ,   1     ,   1       }}),
              DenseMatrix.OfArray(new double[,] {
-                {   1   },
-                {   1   },
-                {   1   }}),
+                {   1     ,   1     ,   1       }}),
         };
 
         public NnInitializerMediumDotComExample()

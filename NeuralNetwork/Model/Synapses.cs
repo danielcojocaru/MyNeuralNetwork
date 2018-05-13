@@ -20,6 +20,11 @@ namespace NeuralNetwork.Model
 
         public void Create(NeuralNetworkCls parent, int[] nrOfNeuronsList, int index, Neurons prevNe)
         {
+            if (parent.CompleteObjList)
+            {
+                parent.NeuronsAndSynappses.Add(this);
+            }
+
             Parent = parent;
             PrevNe = prevNe;
 
@@ -38,6 +43,23 @@ namespace NeuralNetwork.Model
             B = nnInitializer.GetB(index);
 
             NextNe.Initialize(nnInitializer, ++index);
+        }
+
+        public void Forward(Matrix<double> o)
+        {
+            PrintForwardStep(Parent.PrintStep);
+            NextNe.Forward(o, W, B);
+        }
+
+        private void PrintForwardStep(bool printStep)
+        {
+            if (printStep)
+            {
+                Console.WriteLine("W : ");
+                Console.WriteLine(W);
+                Console.WriteLine("B : ");
+                Console.WriteLine(B);
+            }
         }
     }
 }
