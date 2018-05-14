@@ -29,6 +29,14 @@ namespace NeuralNetwork.Model
             }
         }
 
+        public Func<Matrix<double>, Matrix<double>> OutputFunc { get; set; }
+
+        public Matrix<double> I { get; set; }
+        public Matrix<double> O { get; set; }
+
+        public Synapses PrevSy { get; set; }
+        public Synapses NextSy { get; set; }
+
         private void UpdateOutputFunc(ResultEnum value)
         {
             switch (value)
@@ -68,6 +76,8 @@ namespace NeuralNetwork.Model
             Matrix<double> output = ApplyFunction(input, Relu);
             return output;
         }
+
+        
 
         private Matrix<double> SoftmaxFunc(Matrix<double> input)
         {
@@ -138,27 +148,6 @@ namespace NeuralNetwork.Model
         {
             return input;
         }
-
-        //private double SigmoidFunc(double input)
-        //{
-        //    double output = 1D / (1D + Math.Pow(Math.E, -input));
-        //    return output;
-        //}
-
-        //private Matrix<double> SigmoidFunc(Matrix<double> input)
-        //{
-        //    Matrix<double> output = SpecialFunctions.Logistic(input);
-        //    return output;
-        //}
-
-        public Func<Matrix<double>, Matrix<double>> OutputFunc { get; set; }
-
-        public Matrix<double> I { get; set; }
-        public Matrix<double> O { get; set; }
-
-        public Synapses PrevSy { get; set; }
-        public Synapses NextSy { get; set; }
-
         public void Create(NeuralNetworkCls parent, int[] nrOfNeuronsList, int index)
         {
             Create(parent, nrOfNeuronsList, index, null);
@@ -254,6 +243,11 @@ namespace NeuralNetwork.Model
                 + " => "
                 + this.O.ToMatrixString(2, 4, 3, 4, "=", "||", @"\\", " ", "|", x => x.ToString("G3"))
                 ;
+        }
+
+        public void Backpropagation()
+        {
+            throw new NotImplementedException();
         }
 
     }

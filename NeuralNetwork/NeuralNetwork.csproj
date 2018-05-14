@@ -50,6 +50,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Auxiliar\Enum\ErrorEvaluatorEnum.cs" />
     <Compile Include="Auxiliar\Enum\ResultEnum.cs" />
     <Compile Include="Auxiliar\Interface\INeuralNetworkInitializer.cs" />
     <Compile Include="Form1.cs">
