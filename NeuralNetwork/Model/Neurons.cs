@@ -8,6 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using NeuralNetwork.Auxiliar.Interface;
 using MathNet.Numerics;
+using NeuralNetwork.Auxiliar.Other;
 
 namespace NeuralNetwork.Model
 {
@@ -30,9 +31,12 @@ namespace NeuralNetwork.Model
         }
 
         public Func<Matrix<double>, Matrix<double>> OutputFunc { get; set; }
+        public Func<Matrix<double>> OonIFunc { get; set; }
 
         public Matrix<double> I { get; set; }
         public Matrix<double> O { get; set; }
+
+        public Matrix<double> OonI { get; set; }
 
         public Synapses PrevSy { get; set; }
         public Synapses NextSy { get; set; }
@@ -42,63 +46,110 @@ namespace NeuralNetwork.Model
             switch (value)
             {
                 case ResultEnum.Simple:
-                    OutputFunc = SimpleFunc;
+                    OutputFunc = SimpleOutputFunc;
+                    OonIFunc = SimpleOonIFunc;
                     break;
                 case ResultEnum.Relu:
-                    OutputFunc = ReluFunc;
+                    OutputFunc = ReluOutputFunc;
+                    OonIFunc = ReluOonIFunc;
                     break;
                 case ResultEnum.Sigmoid:
-                    OutputFunc = SigmoidFunc;
+                    OutputFunc = SigmoidOutputFunc;
+                    OonIFunc = SigmoidOonIFunc;
                     break;
                 case ResultEnum.Softmax:
-                    OutputFunc = SoftmaxFunc;
+                    OutputFunc = SoftmaxOutputFunc;
+                    OonIFunc = SoftmaxOonIFunc;
                     break;
                 default:
                     break;
             }
         }
 
-        private Matrix<double> SimpleFunc(Matrix<double> input)
+        private Matrix<double> ReluOonIFunc()
+        {
+            Matrix<double> output = ApplyFunction(I, ReluPrime).GetFirstRowAsDiagonalMatrix();
+            return output;
+        }
+
+        private Matrix<double> SigmoidOonIFunc()
+        {
+            Matrix<double> output = ApplyFunction(I, SigmoidPrime).GetFirstRowAsDiagonalMatrix();
+            return output;
+        }
+
+        private Matrix<double> SoftmaxOonIFunc()
+        {
+            Matrix<double> toReturn = Matrix<double>.Build.Dense(I.ColumnCount, I.ColumnCount);
+            double divisor = 0;
+            for (int i = 0; i < I.ColumnCount; i++)
+            {
+                divisor += Math.Exp(I[0, i]);
+            }
+            divisor = Math.Pow(divisor, 2);
+
+            for (int i = 0; i < I.ColumnCount; i++)
+            {
+                double first = Math.Exp(I[0, i]);
+                double secord = 0;
+
+                for (int j = 0; j < I.ColumnCount; j++)
+                {
+                    if (i == j)
+                        continue;
+
+                    secord += Math.Exp(I[0, j]);
+                }
+
+                toReturn[i, i] = first * secord / divisor;
+            }
+            return toReturn;
+        }
+
+        private Matrix<double> SimpleOonIFunc()
+        {
+            throw new NotImplementedException();
+        }
+
+        private Matrix<double> SimpleOutputFunc(Matrix<double> input)
         {
             Matrix<double> output = input * 1;
             return output;
         }
 
-       
-        private Matrix<double> SigmoidFunc(Matrix<double> input)
+        private Matrix<double> SigmoidOutputFunc(Matrix<double> input)
         {
             Matrix<double> output = ApplyFunction(input, Sigmoid);
             return output;
         }
 
-        private Matrix<double> ReluFunc(Matrix<double> input)
+        private Matrix<double> ReluOutputFunc(Matrix<double> input)
         {
             Matrix<double> output = ApplyFunction(input, Relu);
             return output;
         }
 
-        
-
-        private Matrix<double> SoftmaxFunc(Matrix<double> input)
+        private Matrix<double> SoftmaxOutputFunc(Matrix<double> input)
         {
             double sum = GetSoftmaxSum(input);
             Matrix<double> output = ApplySoftmax(input, sum);
             return output;
         }
 
-        private Matrix<double> ApplySoftmax(Matrix<double> matrix, double sum)
+        private Matrix<double> ApplySoftmax(Matrix<double> input, double sum)
         {
-            if (matrix != null)
+            Matrix<double> output = Matrix<double>.Build.Dense(input.RowCount, input.ColumnCount);
+            if (input != null)
             {
-                for (int row = 0; row < matrix.RowCount; row++)
+                for (int row = 0; row < input.RowCount; row++)
                 {
-                    for (int col = 0; col < matrix.ColumnCount; col++)
+                    for (int col = 0; col < input.ColumnCount; col++)
                     {
-                        matrix[row, col] = Math.Exp(matrix[row, col]) / sum;
+                        output[row, col] = Math.Exp(input[row, col]) / sum;
                     }
                 }
             }
-            return matrix;
+            return output;
         }
 
         private double Sigmoid(double input)
@@ -107,26 +158,39 @@ namespace NeuralNetwork.Model
             return output;
         }
 
+        private double SigmoidPrime(double input)
+        {
+            double output = 1 / (1 + Math.Exp(input)) * (1 - 1 / (1 + Math.Exp(input)));
+            return output;
+        }
+
+        private double ReluPrime(double input)
+        {
+            return input == 0 ? 0 : 1;
+        }
+
         private double Relu(double input)
         {
             double output = input > 0 ? input : 0;
             return output;
         }
 
-        private Matrix<double> ApplyFunction(Matrix<double> matrix, Func<double, double> func)
+        private Matrix<double> ApplyFunction(Matrix<double> input, Func<double, double> func)
         {
-            if (matrix != null)
+            Matrix<double> output = Matrix<double>.Build.Dense(input.RowCount, input.ColumnCount);
+            if (input != null)
             {
-                for (int row = 0; row < matrix.RowCount; row++)
+                for (int row = 0; row < input.RowCount; row++)
                 {
-                    for (int col = 0; col < matrix.ColumnCount; col++)
+                    for (int col = 0; col < input.ColumnCount; col++)
                     {
-                        matrix[row, col] = func(matrix[row, col]);
+                        output[row, col] = func(input[row, col]);
                     }
                 }
             }
-            return matrix;
+            return output;
         }
+
 
         private double GetSoftmaxSum(Matrix<double> matrix)
         {
@@ -146,7 +210,7 @@ namespace NeuralNetwork.Model
 
         private double ReluFunc(double input)
         {
-            return input;
+            return Math.Max(0, input);
         }
         public void Create(NeuralNetworkCls parent, int[] nrOfNeuronsList, int index)
         {
@@ -216,11 +280,6 @@ namespace NeuralNetwork.Model
 
         private void SetI(double[] input)
         {
-            //if (this.ResultType == ResultEnum.Sigmoid)
-            //{
-
-            //}
-
             for (int i = 0; i < this.I.ColumnCount; i++)
             {
                 I[0, i] = input[i];
@@ -240,14 +299,35 @@ namespace NeuralNetwork.Model
             return this.ResultType + " : "
                 //+ this.I.ToString("G2")
                 + this.I.ToMatrixString(2, 4, 3, 4, "=", "||", @"\\", " ", "|", x => x.ToString("G3"))
-                + " => "
-                + this.O.ToMatrixString(2, 4, 3, 4, "=", "||", @"\\", " ", "|", x => x.ToString("G3"))
+                //+ " => "
+                //+ this.O.ToMatrixString(2, 4, 3, 4, "=", "||", @"\\", " ", "|", x => x.ToString("G3"))
                 ;
         }
 
-        public void Backpropagation()
+        public void Backpropagation(Matrix<double> errorOrEOnI)
         {
-            throw new NotImplementedException();
+            if (NextSy == null)
+            {
+                Matrix<double> error = errorOrEOnI; // just for the understanding of the code
+                Matrix<double> diagonalError = error.GetFirstRowAsDiagonalMatrix();
+                Matrix<double> oOnI = OonIFunc();
+                Matrix<double> eOnI = diagonalError.Multiply(oOnI);
+
+                PrevSy.Backpropagation(eOnI);
+            }
+            else if (PrevSy != null)
+            {
+                Matrix<double> eOnIPrev = errorOrEOnI; // just for the understanding of the code
+                Matrix<double> eOnO = eOnIPrev.Multiply(NextSy.W);
+                Matrix<double> oOnI = OonIFunc();
+                Matrix<double> eOnI = eOnO.Multiply(oOnI);
+
+                PrevSy.Backpropagation(eOnI);
+            }
+            else
+            {
+                NextSy.ApplyDeltas();
+            }
         }
 
     }

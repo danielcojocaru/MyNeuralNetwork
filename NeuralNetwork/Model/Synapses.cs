@@ -6,6 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using NeuralNetwork.Auxiliar.Interface;
+using NeuralNetwork.Auxiliar.Other;
 
 namespace NeuralNetwork.Model
 {
@@ -17,6 +18,9 @@ namespace NeuralNetwork.Model
 
         public Matrix<double> W { get; set; }
         public Matrix<double> B { get; set; }
+
+        public Matrix<double> dW { get; set; }
+        public Matrix<double> dB { get; set; }
 
         public void Create(NeuralNetworkCls parent, int[] nrOfNeuronsList, int index, Neurons prevNe)
         {
@@ -59,6 +63,34 @@ namespace NeuralNetwork.Model
                 Console.WriteLine(W);
                 Console.WriteLine("B : ");
                 Console.WriteLine(B);
+            }
+        }
+
+        public void Backpropagation(Matrix<double> eOnI)
+        {
+            Matrix<double> oOnW = PrevNe.O.MultiplyRowMatrixToSquareMatrix();
+            Matrix<double> eOnW = eOnI.Multiply(oOnW);
+
+            dB = eOnI.SumSquareMatrixAsOneRowMatrix() * Parent.Lr;
+            dW = eOnW.Transpose() * Parent.Lr;
+
+            //Console.WriteLine(dB);
+            //Console.WriteLine(dW);
+
+            PrevNe.Backpropagation(eOnI);
+        }
+
+        public void ApplyDeltas()
+        {
+            W = W - dW;
+            B = B - dB;
+
+            //Console.WriteLine(W);
+            //Console.WriteLine(B);
+
+            if (NextNe.NextSy != null)
+            {
+                NextNe.NextSy.ApplyDeltas();
             }
         }
     }

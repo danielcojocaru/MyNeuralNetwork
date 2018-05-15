@@ -23,6 +23,8 @@ namespace NeuralNetwork.Model
         public int MaxEpochs { get; set; } = 1;
         public List<Matrix<double>> Errors { get; set; } = new List<Matrix<double>>();
 
+        public double Lr { get; set; } = 0.01;
+
         private ErrorEvaluatorEnum _errorEvaluatorEnum;
         public ErrorEvaluatorEnum ErrorEvaluatorEnum
         {
@@ -98,7 +100,7 @@ namespace NeuralNetwork.Model
             Matrix<double> error = GetError(LastNeurons.O, answer);
             this.Errors.Add(error);
 
-            Console.WriteLine(error);
+            //Console.WriteLine(error);
 
             if (Epochs >= MaxEpochs)
             {
@@ -110,7 +112,7 @@ namespace NeuralNetwork.Model
         private void Backpropagation()
         {
             Matrix<double> error = GetGeneralError(Errors);
-            LastNeurons.Backpropagation();
+            LastNeurons.Backpropagation(error);
         }
 
         private Matrix<double> GetGeneralError(List<Matrix<double>> errors)
