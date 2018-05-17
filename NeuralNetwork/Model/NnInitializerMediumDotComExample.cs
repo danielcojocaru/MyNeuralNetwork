@@ -9,6 +9,7 @@ using MathNet.Numerics.LinearAlgebra.Double;
 
 namespace NeuralNetwork.Model
 {
+    [Serializable]
     public class NnInitializerMediumDotComExample : INeuralNetworkInitializer
     {
         public List<Matrix<double>> WList { get; set; } = new List<Matrix<double>>()

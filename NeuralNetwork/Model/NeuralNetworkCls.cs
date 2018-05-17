@@ -9,6 +9,7 @@ using NeuralNetwork.Auxiliar.Enum;
 
 namespace NeuralNetwork.Model
 {
+    [Serializable]
     public class NeuralNetworkCls
     {
         public Neurons FirstNeurons { get; set; }
@@ -24,6 +25,8 @@ namespace NeuralNetwork.Model
         public List<Matrix<double>> Errors { get; set; } = new List<Matrix<double>>();
 
         public double Lr { get; set; } = 0.01;
+
+        public bool IsExcelTest { get; set; }
 
         private ErrorEvaluatorEnum _errorEvaluatorEnum;
         public ErrorEvaluatorEnum ErrorEvaluatorEnum
@@ -85,11 +88,7 @@ namespace NeuralNetwork.Model
 
         public void Initialize()
         {
-            if (NnInitializer != null)
-            {
-                FirstNeurons.Initialize(NnInitializer, index: 0);
-            }
-
+            FirstNeurons.Initialize(NnInitializer, index: 0);
             this.ErrorEvaluatorEnum = ErrorEvaluatorEnum.Crossentropy;
         }
 
@@ -132,6 +131,33 @@ namespace NeuralNetwork.Model
             }
 
             return error;
+        }
+
+        public void OnBackPropagationEnded()
+        {
+            if (IsExcelTest)
+            {
+                NeuralNetworkCls nnFromEcel = Synapses.ReadFromBinaryFile<NeuralNetworkCls>(Environment.CurrentDirectory + "\\ExternalFiles\\ExcelNnResultSerialized.txt");
+                CheckIfNeuralNetworksAreEqual(nnFromEcel, this);
+            }
+        }
+
+        private void CheckIfNeuralNetworksAreEqual(NeuralNetworkCls nnFromEcel, NeuralNetworkCls neuralNetworkCls)
+        {
+            for (int i = 0; i < nnFromEcel.NeuronsAndSynappses.Count; i++)
+            {
+                if (i % 2 == 1)
+                {
+                    Synapses s1 = nnFromEcel.NeuronsAndSynappses[i] as Synapses;
+                    Synapses s2 = neuralNetworkCls.NeuronsAndSynappses[i] as Synapses;
+
+                    if (!s1.W.Equals(s2.W) || !s1.B.Equals(s2.B))
+                    {
+                        throw new Exception("W or B are not equal.");
+                    }
+                }
+            }
+            System.Windows.Forms.MessageBox.Show("Excel test completed. The current neural network delivered the same results as the serialised class.", "Success", System.Windows.Forms.MessageBoxButtons.OK, System.Windows.Forms.MessageBoxIcon.Asterisk);
         }
 
         private Matrix<double> GetError(Matrix<double> o, double[] answer)

@@ -61,7 +61,7 @@
       <DependentUpon>Form1.cs</DependentUpon>
     </Compile>
     <Compile Include="LayerOld.cs" />
-    <Compile Include="Model\NeuralNetwork.cs" />
+    <Compile Include="Model\NeuralNetworkCls.cs" />
     <Compile Include="Model\Neurons.cs" />
     <Compile Include="Model\NnInitializerMediumDotComExample.cs" />
     <Compile Include="Model\Synapses.cs" />
@@ -124,6 +124,10 @@
       <EmbedInteropTypes>True</EmbedInteropTypes>
     </COMReference>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Content Include="ExternalFiles\ExcelNnResultSerialized.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

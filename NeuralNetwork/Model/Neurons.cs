@@ -12,6 +12,7 @@ using NeuralNetwork.Auxiliar.Other;
 
 namespace NeuralNetwork.Model
 {
+    [Serializable]
     public class Neurons
     {
         public NeuralNetworkCls Parent { get; set; }
@@ -246,6 +247,8 @@ namespace NeuralNetwork.Model
 
         public void Forward(Matrix<double> o, Matrix<double> w, Matrix<double> b)
         {
+            //Console.WriteLine(b);
+
             I = o.Multiply(w).Add(b);
             O = OutputFunc(I);
 

@@ -20,29 +20,30 @@ namespace NeuralNetwork
         {
             InitializeComponent();
             InitializeNeuralNetwork();
+
+            //ExcelTest();
+
         }
 
         private void InitializeNeuralNetwork()
         {
-            //Matrix<double> m = DenseMatrix.OfArray(new double[,] {
-            //    {   1   },
-            //    {   0   },
-            //    {   1   }});
+            nn = new NeuralNetworkCls();
+            nn.Create(new int[] { 2, 2, 1 });
+            nn.NnInitializer = null;
+            nn.Initialize();
+        }
 
-            //Console.WriteLine(m);
-            //m = m - 1;
-
-            //Console.WriteLine(m.L1Norm());
-
-            //Matrix < double > n = Matrix<double>.Build.Dense(4, 1);
-
-            //Console.WriteLine(n);
-
+        /// <summary>
+        /// This tests if the neural network still does the Forward and Backpropagation properly. The expected results are in the file Nn.xlsx
+        /// </summary>
+        private void ExcelTest()
+        {
             nn = new NeuralNetworkCls();
             nn.Create(new int[] { 3, 3, 3, 3 });
             nn.NnInitializer = new NnInitializerMediumDotComExample();
+            nn.IsExcelTest = true;
             nn.Initialize();
-            nn.Forward(new double[] { 0.1, 0.2, 0.7}, new double[] { 1, 0, 0 });
+            nn.Forward(new double[] { 0.1, 0.2, 0.7 }, new double[] { 1, 0, 0 });
         }
 
         private NeuralNetworkOld nnOld;
@@ -138,7 +139,7 @@ namespace NeuralNetwork
             foreach (double[] input in inputs)
             {
                 double[] answer = GetAnswer(input);
-                nnOld.Train(input, answer);
+                nn.Forward(input, answer);
             }
         }
 
@@ -207,23 +208,6 @@ namespace NeuralNetwork
                 list[n] = value;
             }
         }
-
-        //private void TrainNn1()
-        //{
-        //    Random ran = new Random();
-
-        //    double[][] allInputs = { _input1, _input2, _input3, _input4 };
-        //    double[][] y = { new double[] { 0 }, new double[] { 1 }, new double[] { 1 }, new double[] { 0 } };
-
-        //    for (int i = 0; i < 10000; i++)
-        //    {
-        //        int index = ran.Next(0, 4);
-        //        double[] input = allInputs[index];
-        //        double[] answer = y[index];
-
-        //        nn.Train(input, answer);
-        //    }
-        //}
 
         private void SetWAndB_Click(object sender, EventArgs e)
         {

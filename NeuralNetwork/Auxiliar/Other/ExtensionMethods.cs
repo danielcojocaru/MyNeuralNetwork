@@ -48,15 +48,15 @@ namespace NeuralNetwork.Auxiliar.Other
             return toReturn;
         }
 
-        public static Matrix<double> MultiplyRowMatrixToSquareMatrix(this Matrix<double> @this)
+        public static Matrix<double> MultiplyRowMatrix(this Matrix<double> @this, int times)
         {
-            Matrix<double> toReturn = Matrix<double>.Build.Dense(@this.ColumnCount, @this.ColumnCount);
+            Matrix<double> toReturn = Matrix<double>.Build.Dense(times, @this.ColumnCount);
 
-            for (int i = 0; i < @this.ColumnCount; i++)
+            for (int i = 0; i < times; i++)
             {
                 for (int j = 0; j < @this.ColumnCount; j++)
                 {
-                    toReturn[j, i] = @this[0, i];
+                    toReturn[i, j] = @this[0, j];
                 }
             }
 
