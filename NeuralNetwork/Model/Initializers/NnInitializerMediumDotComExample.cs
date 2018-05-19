@@ -1,13 +1,13 @@
-﻿using NeuralNetwork.Auxiliar.Interface;
+﻿using MathNet.Numerics.LinearAlgebra;
+using MathNet.Numerics.LinearAlgebra.Double;
+using NeuralNetwork.Auxiliar.Interface;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using MathNet.Numerics.LinearAlgebra;
-using MathNet.Numerics.LinearAlgebra.Double;
 
-namespace NeuralNetwork.Model
+namespace NeuralNetwork.Model.Initializers
 {
     [Serializable]
     public class NnInitializerMediumDotComExample : INeuralNetworkInitializer

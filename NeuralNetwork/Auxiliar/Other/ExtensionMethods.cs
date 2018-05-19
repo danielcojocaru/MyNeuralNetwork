@@ -21,6 +21,18 @@ namespace NeuralNetwork.Auxiliar.Other
             return toReturn;
         }
 
+        public static Matrix<double> GetFirstColumnAsDiagonalMatrix(this Matrix<double> @this)
+        {
+            Matrix<double> toReturn = Matrix<double>.Build.Dense(@this.RowCount, @this.RowCount);
+
+            for (int i = 0; i < @this.RowCount; i++)
+            {
+                toReturn[i, i] = @this[i, 0];
+            }
+
+            return toReturn;
+        }
+
         public static Matrix<double> GetDiagonalMatrixAsOneRowMatrix(this Matrix<double> @this)
         {
             Matrix<double> toReturn = Matrix<double>.Build.Dense(1, @this.ColumnCount);

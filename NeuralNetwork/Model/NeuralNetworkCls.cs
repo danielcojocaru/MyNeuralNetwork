@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using MathNet.Numerics.LinearAlgebra;
 using NeuralNetwork.Auxiliar.Enum;
+using System.IO;
 
 namespace NeuralNetwork.Model
 {
@@ -86,22 +87,38 @@ namespace NeuralNetwork.Model
             FirstNeurons.Create(this, nrOfNeuronsList, index: 0);
         }
 
+        
+
         public void Initialize()
         {
             FirstNeurons.Initialize(NnInitializer, index: 0);
             this.ErrorEvaluatorEnum = ErrorEvaluatorEnum.Crossentropy;
         }
 
-        public void Forward(double[] input, double[] answer)
+
+
+        public Matrix<double> Guess(double[] input)
         {
-            Epochs++;
+            Forward(input, doBackpropagation : false);
+            return LastNeurons.O;
+        }
+
+        public void Forward(double[] input, double[] answer = null, bool? doBackpropagation = true)
+        {
+            if (doBackpropagation == true)
+            {
+                Epochs++;
+            }
+
             FirstNeurons.Forward(input);
-            Matrix<double> error = GetError(LastNeurons.O, answer);
-            this.Errors.Add(error);
 
-            //Console.WriteLine(error);
+            if (answer != null)
+            {
+                Matrix<double> error = GetError(LastNeurons.I, answer);
+                this.Errors.Add(error);
+            }
 
-            if (Epochs >= MaxEpochs)
+            if (doBackpropagation == true && Epochs >= MaxEpochs)
             {
                 Epochs = 0;
                 Backpropagation();
@@ -116,18 +133,18 @@ namespace NeuralNetwork.Model
 
         private Matrix<double> GetGeneralError(List<Matrix<double>> errors)
         {
-            Matrix<double> error = Matrix<double>.Build.Dense(1, LastNeurons.O.ColumnCount);
+            Matrix<double> error = Matrix<double>.Build.Dense(LastNeurons.O.RowCount, 1);
             foreach (Matrix<double> e in errors)
             {
-                for (int i = 0; i < error.ColumnCount; i++)
+                for (int i = 0; i < error.RowCount; i++)
                 {
-                    error[0, i] += e[0, i];
+                    error[i, 0] += e[i, 0];
                 }
             }
 
-            for (int i = 0; i < error.ColumnCount; i++)
+            for (int i = 0; i < error.RowCount; i++)
             {
-                error[0, i] = error[0, i] / errors.Count;
+                error[i, 0] = error[i, 0] / errors.Count;
             }
 
             return error;
@@ -137,7 +154,10 @@ namespace NeuralNetwork.Model
         {
             if (IsExcelTest)
             {
-                NeuralNetworkCls nnFromEcel = Synapses.ReadFromBinaryFile<NeuralNetworkCls>(Environment.CurrentDirectory + "\\ExternalFiles\\ExcelNnResultSerialized.txt");
+                string path = Environment.CurrentDirectory + "\\ExternalFiles\\ExcelTwoSixThreeTwo.txt";
+                //WriteToBinaryFile(path, this);
+
+                NeuralNetworkCls nnFromEcel = ReadFromBinaryFile<NeuralNetworkCls>(path);
                 CheckIfNeuralNetworksAreEqual(nnFromEcel, this);
             }
         }
@@ -162,12 +182,31 @@ namespace NeuralNetwork.Model
 
         private Matrix<double> GetError(Matrix<double> o, double[] answer)
         {
-            for (int i = 0; i < o.ColumnCount; i++)
+            Matrix<double> error = Matrix<double>.Build.Dense(o.RowCount, o.ColumnCount);
+            for (int i = 0; i < o.RowCount; i++)
             {
-                o[0, i] = FuncErrorEval(answer[i], o[0, i]);
+                error[i, 0] = FuncErrorEval(answer[i], o[i, 0]);
             }
 
-            return o;
+            return error;
+        }
+
+        public static void WriteToBinaryFile<T>(string filePath, T objectToWrite, bool append = false)
+        {
+            using (Stream stream = File.Open(filePath, append ? FileMode.Append : FileMode.Create))
+            {
+                var binaryFormatter = new System.Runtime.Serialization.Formatters.Binary.BinaryFormatter();
+                binaryFormatter.Serialize(stream, objectToWrite);
+            }
+        }
+
+        public static T ReadFromBinaryFile<T>(string filePath)
+        {
+            using (Stream stream = File.Open(filePath, FileMode.Open))
+            {
+                var binaryFormatter = new System.Runtime.Serialization.Formatters.Binary.BinaryFormatter();
+                return (T)binaryFormatter.Deserialize(stream);
+            }
         }
 
     }

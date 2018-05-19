@@ -11,6 +11,8 @@ using System.Windows.Forms;
 using System.Security.Cryptography;
 using NeuralNetwork.Model;
 using MathNet.Numerics.LinearAlgebra.Double;
+using NeuralNetwork.Model.Initializers;
+using NeuralNetwork.Auxiliar.Enum;
 
 namespace NeuralNetwork
 {
@@ -21,40 +23,53 @@ namespace NeuralNetwork
             InitializeComponent();
             InitializeNeuralNetwork();
 
-            //ExcelTest();
+            //ExcelTestTwoSixThreeTwo();
 
         }
 
         private void InitializeNeuralNetwork()
         {
             nn = new NeuralNetworkCls();
-            nn.Create(new int[] { 2, 2, 1 });
-            nn.NnInitializer = null;
+            nn.Create(new int[] { 2, 6, 3, 1 });
+            //nn.NnInitializer = new NnInitializerTwoSixThreeTwo();
+            //nn.IsExcelTest = true;
             nn.Initialize();
+            nn.LastNeurons.ResultType = ResultEnum.Sigmoid; // Softmax doesn't work when the ouput layer has only one neuron
+            //nn.Forward(new double[] { 1, 2 }, new double[] { 1, 0 });
         }
 
-        /// <summary>
-        /// This tests if the neural network still does the Forward and Backpropagation properly. The expected results are in the file Nn.xlsx
-        /// </summary>
-        private void ExcelTest()
+        private void ExcelTestTwoSixThreeTwo()
         {
             nn = new NeuralNetworkCls();
-            nn.Create(new int[] { 3, 3, 3, 3 });
-            nn.NnInitializer = new NnInitializerMediumDotComExample();
+            nn.Create(new int[] { 2, 6, 3, 2 });
+            nn.NnInitializer = new NnInitializerTwoSixThreeTwo();
             nn.IsExcelTest = true;
             nn.Initialize();
-            nn.Forward(new double[] { 0.1, 0.2, 0.7 }, new double[] { 1, 0, 0 });
+            nn.Forward(new double[] { 1, 2 }, new double[] { 1, 0 });
         }
 
-        private NeuralNetworkOld nnOld;
+        ///// <summary>
+        ///// This tests if the neural network still does the Forward and Backpropagation properly. The expected results are in the file Nn.xlsx
+        ///// </summary>
+        //private void ExcelTest()
+        //{
+        //    nn = new NeuralNetworkCls();
+        //    nn.Create(new int[] { 3, 3, 3, 3 });
+        //    nn.NnInitializer = new NnInitializerMediumDotComExample();
+        //    nn.IsExcelTest = true;
+        //    nn.Initialize();
+        //    nn.Forward(new double[] { 0.1, 0.2, 0.7 }, new double[] { 1, 0, 0 });
+        //}
+
+        //private NeuralNetworkOld nnOld;
         private NeuralNetworkCls nn;
 
-        private void InitializeNeuralNetworkOld()
-        {
-            nnOld = new NeuralNetworkOld();
-            nnOld.Create(new int[] { 2, 2, 1 });
-            nnOld.Initialize();
-        }
+        //private void InitializeNeuralNetworkOld()
+        //{
+        //    nnOld = new NeuralNetworkOld();
+        //    nnOld.Create(new int[] { 2, 2, 1 });
+        //    nnOld.Initialize();
+        //}
 
         private void Form1_Load(object sender, EventArgs e)
         {
@@ -70,41 +85,41 @@ namespace NeuralNetwork
         {
             Matrix<double> output;
 
-            output = nnOld.Guess(_input1);
+            output = nn.Guess(_input1);
             label1.Text = output[0, 0].ToString();
 
-            output = nnOld.Guess(_input2);
+            output = nn.Guess(_input2);
             label2.Text = output[0, 0].ToString();
 
-            output = nnOld.Guess(_input3);
+            output = nn.Guess(_input3);
             label3.Text = output[0, 0].ToString();
 
-            output = nnOld.Guess(_input4);
+            output = nn.Guess(_input4);
             label4.Text = output[0, 0].ToString();
         }
 
         private void button1_Click(object sender, EventArgs e)
         {
-            nnOld.Train(_input1, new double[] { 0 });
-            nnOld.PrintToExcel();
+            //nn.Train(_input1, new double[] { 0 });
+            //nn.PrintToExcel();
         }
 
         private void button2_Click(object sender, EventArgs e)
         {
-            nnOld.Train(_input2, new double[] { 1 });
-            nnOld.PrintToExcel();
+            //nn.Train(_input2, new double[] { 1 });
+            //nn.PrintToExcel();
         }
 
         private void button3_Click(object sender, EventArgs e)
         {
-            nnOld.Train(_input3, new double[] { 1 });
-            nnOld.PrintToExcel();
+            //nn.Train(_input3, new double[] { 1 });
+            //nn.PrintToExcel();
         }
 
         private void button4_Click(object sender, EventArgs e)
         {
-            nnOld.Train(_input4, new double[] { 0 });
-            nnOld.PrintToExcel();
+            //nn.Train(_input4, new double[] { 0 });
+            //nn.PrintToExcel();
         }
 
         private void button10_Click(object sender, EventArgs e)
@@ -126,11 +141,11 @@ namespace NeuralNetwork
         {
             List<double[]> inputs = new List<double[]>();
 
-            for (int i = 0; i < 100000; i++)
+            for (int i = 0; i < 1000; i++)
             {
                 inputs.Add(_input1);
-                inputs.Add(_input2);
-                inputs.Add(_input3);
+                //inputs.Add(_input2);
+                //inputs.Add(_input3);
                 inputs.Add(_input4);
             }
 
@@ -211,41 +226,41 @@ namespace NeuralNetwork
 
         private void SetWAndB_Click(object sender, EventArgs e)
         {
-            LayerOld l1 = nnOld.Layers[1];
-            l1.W[0, 0] = 20;
-            l1.W[0, 1] = 20;
-            l1.W[1, 0] = -20;
-            l1.W[1, 1] = -20;
+            //LayerOld l1 = nnOld.Layers[1];
+            //l1.W[0, 0] = 20;
+            //l1.W[0, 1] = 20;
+            //l1.W[1, 0] = -20;
+            //l1.W[1, 1] = -20;
 
-            l1.B[0, 0] = -10;
-            l1.B[1, 0] = 30;
+            //l1.B[0, 0] = -10;
+            //l1.B[1, 0] = 30;
 
-            LayerOld l2 = nnOld.Layers[2];
-            l2.W[0, 0] = 20;
-            l2.W[0, 1] = 20;
-            l2.B[0, 0] = -30;
+            //LayerOld l2 = nnOld.Layers[2];
+            //l2.W[0, 0] = 20;
+            //l2.W[0, 1] = 20;
+            //l2.B[0, 0] = -30;
         }
 
         private void SetAt75_Click(object sender, EventArgs e)
         {
-            LayerOld l1 = nnOld.Layers[1];
-            l1.W[0, 0] = 15;
-            l1.W[0, 1] = 10;
-            l1.W[1, 0] = -15;
-            l1.W[1, 1] = -10;
+            //LayerOld l1 = nnOld.Layers[1];
+            //l1.W[0, 0] = 15;
+            //l1.W[0, 1] = 10;
+            //l1.W[1, 0] = -15;
+            //l1.W[1, 1] = -10;
 
-            l1.B[0, 0] = -10;
-            l1.B[1, 0] = 30;
+            //l1.B[0, 0] = -10;
+            //l1.B[1, 0] = 30;
 
-            LayerOld l2 = nnOld.Layers[2];
-            l2.W[0, 0] = 20;
-            l2.W[0, 1] = 20;
-            l2.B[0, 0] = -30;
+            //LayerOld l2 = nnOld.Layers[2];
+            //l2.W[0, 0] = 20;
+            //l2.W[0, 1] = 20;
+            //l2.B[0, 0] = -30;
         }
 
         private void button9_Click(object sender, EventArgs e)
         {
-            nnOld.PrintToExcel();
+            //nnOld.PrintToExcel();
         }
 
         

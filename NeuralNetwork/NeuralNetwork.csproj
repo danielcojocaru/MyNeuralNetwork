@@ -61,9 +61,10 @@
       <DependentUpon>Form1.cs</DependentUpon>
     </Compile>
     <Compile Include="LayerOld.cs" />
+    <Compile Include="Model\Initializers\NnInitializerMediumDotComExample.cs" />
+    <Compile Include="Model\Initializers\NnInitializerTwoSixThreeTwo.cs" />
     <Compile Include="Model\NeuralNetworkCls.cs" />
     <Compile Include="Model\Neurons.cs" />
-    <Compile Include="Model\NnInitializerMediumDotComExample.cs" />
     <Compile Include="Model\Synapses.cs" />
     <Compile Include="NeuralNetworkOld.cs" />
     <Compile Include="Program.cs" />
@@ -125,7 +126,7 @@
     </COMReference>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="ExternalFiles\ExcelNnResultSerialized.txt">
+    <Content Include="ExternalFiles\ExcelTwoSixThreeTwoSerialized.txt">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
   </ItemGroup>

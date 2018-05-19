@@ -39,7 +39,7 @@ namespace NeuralNetwork.Model
             int prevNrOfInputs = nrOfNeuronsList[index];
             int nextNrOfNeuros = nrOfNeuronsList[++index];
             W = Matrix<double>.Build.Dense(nextNrOfNeuros, prevNrOfInputs);
-            B = Matrix<double>.Build.Dense(1, nextNrOfNeuros);
+            B = Matrix<double>.Build.Dense(nextNrOfNeuros, 1);
 
             NextNe = new Neurons();
             NextNe.Create(parent, nrOfNeuronsList, index, this);
@@ -97,11 +97,11 @@ namespace NeuralNetwork.Model
 
         public void Backpropagation(Matrix<double> eOnI)
         {
-            Matrix<double> oOnW = PrevNe.O.MultiplyRowMatrix(eOnI.ColumnCount);
-            Matrix<double> eOnW = eOnI.Multiply(oOnW);
+            Matrix<double> oOnW = PrevNe.O.Transpose();
+            //Matrix<double> eOnW = eOnI.Multiply(oOnW);
 
-            dB = eOnI.SumSquareMatrixAsOneRowMatrix() * Parent.Lr;
-            dW = eOnW.Transpose() * Parent.Lr;
+            dB = eOnI * Parent.Lr;
+            dW = eOnI.Multiply(oOnW) * Parent.Lr;
 
             //Console.WriteLine(dB);
             //Console.WriteLine(dW);
@@ -114,8 +114,8 @@ namespace NeuralNetwork.Model
             W = W - dW;
             B = B - dB;
 
-            Console.WriteLine(W);
-            Console.WriteLine(B);
+            //Console.WriteLine(W);
+            //Console.WriteLine(B);
 
             if (NextNe.NextSy != null)
             {
@@ -127,22 +127,6 @@ namespace NeuralNetwork.Model
             }
         }
 
-        public static void WriteToBinaryFile<T>(string filePath, T objectToWrite, bool append = false)
-        {
-            using (Stream stream = File.Open(filePath, append ? FileMode.Append : FileMode.Create))
-            {
-                var binaryFormatter = new System.Runtime.Serialization.Formatters.Binary.BinaryFormatter();
-                binaryFormatter.Serialize(stream, objectToWrite);
-            }
-        }
-
-        public static T ReadFromBinaryFile<T>(string filePath)
-        {
-            using (Stream stream = File.Open(filePath, FileMode.Open))
-            {
-                var binaryFormatter = new System.Runtime.Serialization.Formatters.Binary.BinaryFormatter();
-                return (T)binaryFormatter.Deserialize(stream);
-            }
-        }
+        
     }
 }

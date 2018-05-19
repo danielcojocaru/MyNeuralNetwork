@@ -69,40 +69,46 @@ namespace NeuralNetwork.Model
 
         private Matrix<double> ReluOonIFunc()
         {
-            Matrix<double> output = ApplyFunction(I, ReluPrime).GetFirstRowAsDiagonalMatrix();
+            Matrix<double> oOrI = GetOOrIMatrix();
+
+            Matrix<double> output = ApplyFunction(oOrI, ReluPrime);
             return output;
         }
 
         private Matrix<double> SigmoidOonIFunc()
         {
-            Matrix<double> output = ApplyFunction(I, SigmoidPrime).GetFirstRowAsDiagonalMatrix();
+            Matrix<double> oOrI = GetOOrIMatrix();
+
+            Matrix<double> output = ApplyFunction(oOrI, SigmoidPrime);
             return output;
         }
 
         private Matrix<double> SoftmaxOonIFunc()
         {
-            Matrix<double> toReturn = Matrix<double>.Build.Dense(I.ColumnCount, I.ColumnCount);
+            Matrix<double> oOrI = GetOOrIMatrix();
+
+            Matrix<double> toReturn = Matrix<double>.Build.Dense(oOrI.RowCount, oOrI.ColumnCount);
             double divisor = 0;
-            for (int i = 0; i < I.ColumnCount; i++)
+            for (int i = 0; i < oOrI.RowCount; i++)
             {
-                divisor += Math.Exp(I[0, i]);
+                divisor += Math.Exp(oOrI[i, 0]);
             }
             divisor = Math.Pow(divisor, 2);
 
-            for (int i = 0; i < I.ColumnCount; i++)
+            for (int i = 0; i < oOrI.RowCount; i++)
             {
-                double first = Math.Exp(I[0, i]);
+                double first = Math.Exp(oOrI[i, 0]);
                 double secord = 0;
 
-                for (int j = 0; j < I.ColumnCount; j++)
+                for (int j = 0; j < oOrI.RowCount; j++)
                 {
                     if (i == j)
                         continue;
 
-                    secord += Math.Exp(I[0, j]);
+                    secord += Math.Exp(oOrI[j, 0]);
                 }
 
-                toReturn[i, i] = first * secord / divisor;
+                toReturn[i, 0] = first * secord / divisor;
             }
             return toReturn;
         }
@@ -110,6 +116,11 @@ namespace NeuralNetwork.Model
         private Matrix<double> SimpleOonIFunc()
         {
             throw new NotImplementedException();
+        }
+
+        private Matrix<double> GetOOrIMatrix()
+        {
+            return NextSy == null ? O : I;
         }
 
         private Matrix<double> SimpleOutputFunc(Matrix<double> input)
@@ -167,7 +178,7 @@ namespace NeuralNetwork.Model
 
         private double ReluPrime(double input)
         {
-            return input == 0 ? 0 : 1;
+            return input <= 0 ? 0 : 1;
         }
 
         private double Relu(double input)
@@ -229,8 +240,8 @@ namespace NeuralNetwork.Model
             PrevSy = prevSy; // could be null
 
             int nrOfNeurons = nrOfNeuronsList[index];
-            I = Matrix<double>.Build.Dense(1, nrOfNeurons);
-            O = Matrix<double>.Build.Dense(1, nrOfNeurons);
+            I = Matrix<double>.Build.Dense(nrOfNeurons, 1);
+            O = Matrix<double>.Build.Dense(nrOfNeurons, 1);
 
             ResultType = (ResultEnum)index;
 
@@ -249,7 +260,7 @@ namespace NeuralNetwork.Model
         {
             //Console.WriteLine(b);
 
-            I = o.Multiply(w).Add(b);
+            I = w.Multiply(o).Add(b);
             O = OutputFunc(I);
 
             PrintForwardStep(Parent.PrintStep);
@@ -283,9 +294,9 @@ namespace NeuralNetwork.Model
 
         private void SetI(double[] input)
         {
-            for (int i = 0; i < this.I.ColumnCount; i++)
+            for (int i = 0; i < this.I.RowCount; i++)
             {
-                I[0, i] = input[i];
+                I[i, 0] = input[i];
             }
         }
 
@@ -309,24 +320,27 @@ namespace NeuralNetwork.Model
 
         public void Backpropagation(Matrix<double> errorOrEOnI)
         {
+            // It's the Output-layer with neurons
             if (NextSy == null)
             {
                 Matrix<double> error = errorOrEOnI; // just for the understanding of the code
-                Matrix<double> diagonalError = error.GetFirstRowAsDiagonalMatrix();
+                Matrix<double> diagonalError = error.GetFirstColumnAsDiagonalMatrix();
                 Matrix<double> oOnI = OonIFunc();
                 Matrix<double> eOnI = diagonalError.Multiply(oOnI);
 
                 PrevSy.Backpropagation(eOnI);
             }
+            // It's a hidden Neural-layer but (not the first or the last)
             else if (PrevSy != null)
             {
                 Matrix<double> eOnIPrev = errorOrEOnI; // just for the understanding of the code
-                Matrix<double> eOnO = eOnIPrev.Multiply(NextSy.W);
+                Matrix<double> eOnO = eOnIPrev.Transpose().Multiply(NextSy.W);
                 Matrix<double> oOnI = OonIFunc();
-                Matrix<double> eOnI = eOnO.Multiply(oOnI);
+                Matrix<double> eOnI = eOnO.GetFirstRowAsDiagonalMatrix().Multiply(oOnI);
 
                 PrevSy.Backpropagation(eOnI);
             }
+            // It's the input Neural-layer
             else
             {
                 NextSy.ApplyDeltas();
