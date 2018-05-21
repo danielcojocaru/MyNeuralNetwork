@@ -1,5 +1,6 @@
 ﻿using MathNet.Numerics.LinearAlgebra;
 using Microsoft.Office.Interop.Excel;
+using NeuralNetwork.Auxiliar.Interface;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace NeuralNetwork
 {
-    public class NeuralNetworkOld
+    public class NeuralNetworkOld : INeuralNetwork
     {
         public List<LayerOld> Layers { get; set; } = new List<LayerOld>();
         public LayerOld FirstLayer { get; set; }
@@ -72,7 +73,7 @@ namespace NeuralNetwork
             return output;
         }
 
-        public void Train(double[] input, double[] targets)
+        public void Forward(double[] input, double[] targets)
         {
             FirstLayer.Guess(input);
             LastLayer.Backwards(targets);
@@ -154,7 +155,7 @@ namespace NeuralNetwork
             }
         }
 
-    private List<double> GetListFromMatrix(Matrix<double> matrix)
+        private List<double> GetListFromMatrix(Matrix<double> matrix)
         {
             List<double> list = new List<double>();
             for (int row = 0; row < matrix.RowCount; row++)

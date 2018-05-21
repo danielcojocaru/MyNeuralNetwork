@@ -52,6 +52,8 @@
   <ItemGroup>
     <Compile Include="Auxiliar\Enum\ErrorEvaluatorEnum.cs" />
     <Compile Include="Auxiliar\Enum\ResultEnum.cs" />
+    <Compile Include="Auxiliar\Interface\IFunctionInitializer.cs" />
+    <Compile Include="Auxiliar\Interface\INeuralNetwork.cs" />
     <Compile Include="Auxiliar\Interface\INeuralNetworkInitializer.cs" />
     <Compile Include="Auxiliar\Other\ExtensionMethods.cs" />
     <Compile Include="Form1.cs">
@@ -61,7 +63,9 @@
       <DependentUpon>Form1.cs</DependentUpon>
     </Compile>
     <Compile Include="LayerOld.cs" />
+    <Compile Include="Model\Initializers\FunctionInitializerReluAndSimple.cs" />
     <Compile Include="Model\Initializers\NnInitializerMediumDotComExample.cs" />
+    <Compile Include="Model\Initializers\NnInitializerTwoSixThreeOne.cs" />
     <Compile Include="Model\Initializers\NnInitializerTwoSixThreeTwo.cs" />
     <Compile Include="Model\NeuralNetworkCls.cs" />
     <Compile Include="Model\Neurons.cs" />

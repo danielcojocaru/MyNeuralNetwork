@@ -69,43 +69,37 @@ namespace NeuralNetwork.Model
 
         private Matrix<double> ReluOonIFunc()
         {
-            Matrix<double> oOrI = GetOOrIMatrix();
-
-            Matrix<double> output = ApplyFunction(oOrI, ReluPrime);
+            Matrix<double> output = ApplyFunction(O, ReluPrime);
             return output;
         }
 
         private Matrix<double> SigmoidOonIFunc()
         {
-            Matrix<double> oOrI = GetOOrIMatrix();
-
-            Matrix<double> output = ApplyFunction(oOrI, SigmoidPrime);
+            Matrix<double> output = ApplyFunction(O, SigmoidPrime);
             return output;
         }
 
         private Matrix<double> SoftmaxOonIFunc()
         {
-            Matrix<double> oOrI = GetOOrIMatrix();
-
-            Matrix<double> toReturn = Matrix<double>.Build.Dense(oOrI.RowCount, oOrI.ColumnCount);
+            Matrix<double> toReturn = Matrix<double>.Build.Dense(O.RowCount, O.ColumnCount);
             double divisor = 0;
-            for (int i = 0; i < oOrI.RowCount; i++)
+            for (int i = 0; i < O.RowCount; i++)
             {
-                divisor += Math.Exp(oOrI[i, 0]);
+                divisor += Math.Exp(O[i, 0]);
             }
             divisor = Math.Pow(divisor, 2);
 
-            for (int i = 0; i < oOrI.RowCount; i++)
+            for (int i = 0; i < O.RowCount; i++)
             {
-                double first = Math.Exp(oOrI[i, 0]);
+                double first = Math.Exp(O[i, 0]);
                 double secord = 0;
 
-                for (int j = 0; j < oOrI.RowCount; j++)
+                for (int j = 0; j < O.RowCount; j++)
                 {
                     if (i == j)
                         continue;
 
-                    secord += Math.Exp(oOrI[j, 0]);
+                    secord += Math.Exp(O[j, 0]);
                 }
 
                 toReturn[i, 0] = first * secord / divisor;
@@ -118,10 +112,10 @@ namespace NeuralNetwork.Model
             throw new NotImplementedException();
         }
 
-        private Matrix<double> GetOOrIMatrix()
-        {
-            return NextSy == null ? O : I;
-        }
+        //private Matrix<double> GetOOrIMatrix()
+        //{
+        //    return NextSy == null ? O : I;
+        //}
 
         private Matrix<double> SimpleOutputFunc(Matrix<double> input)
         {
@@ -243,7 +237,14 @@ namespace NeuralNetwork.Model
             I = Matrix<double>.Build.Dense(nrOfNeurons, 1);
             O = Matrix<double>.Build.Dense(nrOfNeurons, 1);
 
-            ResultType = (ResultEnum)index;
+            if (parent.FunctionInitializer != null)
+            {
+                ResultType = parent.FunctionInitializer.GetResultEnum(index);
+            }
+            else
+            {
+                ResultType = (ResultEnum)index;
+            }
 
             if (index < nrOfNeuronsList.Length - 1)
             {

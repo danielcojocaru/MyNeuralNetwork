@@ -11,12 +11,13 @@ using System.IO;
 namespace NeuralNetwork.Model
 {
     [Serializable]
-    public class NeuralNetworkCls
+    public class NeuralNetworkCls : INeuralNetwork
     {
         public Neurons FirstNeurons { get; set; }
         public Neurons LastNeurons { get; set; }
 
         public INeuralNetworkInitializer NnInitializer { get; set; }
+        public IFunctionInitializer FunctionInitializer { get; set; }
 
         public bool PrintStep = false;
         public bool CompleteObjList = true;
@@ -25,7 +26,7 @@ namespace NeuralNetwork.Model
         public int MaxEpochs { get; set; } = 1;
         public List<Matrix<double>> Errors { get; set; } = new List<Matrix<double>>();
 
-        public double Lr { get; set; } = 0.01;
+        public double Lr { get; set; } = 0.1;
 
         public bool IsExcelTest { get; set; }
 
@@ -53,6 +54,12 @@ namespace NeuralNetwork.Model
                 case ErrorEvaluatorEnum.Crossentropy:
                     FuncErrorEval = CrossentropyError;
                     break;
+                case ErrorEvaluatorEnum.Simple:
+                    FuncErrorEval = SimpleError;
+                    break;
+                case ErrorEvaluatorEnum.Square:
+                    FuncErrorEval = SquareError;
+                    break;
                 default:
                     throw new NotImplementedException();
             }
@@ -67,6 +74,18 @@ namespace NeuralNetwork.Model
         private double CrossentropyError(double expected, double received)
         {
             double toReturn = (-1) * (expected * (1 / received) + (1 - expected) * (1 / (1 - received)));
+            return toReturn;
+        }
+
+        private double SimpleError(double expected, double received)
+        {
+            double toReturn = received - expected;
+            return toReturn;
+        }
+
+        private double SquareError(double expected, double received)
+        {
+            double toReturn = Math.Pow(received, 2) - Math.Pow(expected, 2);
             return toReturn;
         }
 
@@ -87,20 +106,30 @@ namespace NeuralNetwork.Model
             FirstNeurons.Create(this, nrOfNeuronsList, index: 0);
         }
 
-        
-
         public void Initialize()
         {
             FirstNeurons.Initialize(NnInitializer, index: 0);
-            this.ErrorEvaluatorEnum = ErrorEvaluatorEnum.Crossentropy;
+
+            if (FunctionInitializer != null)
+            {
+                ErrorEvaluatorEnum = FunctionInitializer.GetErrorEvaluatorEnum();
+            }
+            else
+            {
+                ErrorEvaluatorEnum = ErrorEvaluatorEnum.Simple;
+            }
+
         }
-
-
 
         public Matrix<double> Guess(double[] input)
         {
             Forward(input, doBackpropagation : false);
             return LastNeurons.O;
+        }
+
+        public void Forward(double[] input, double[] answer = null)
+        {
+            Forward(input, answer, doBackpropagation : true);
         }
 
         public void Forward(double[] input, double[] answer = null, bool? doBackpropagation = true)
@@ -114,7 +143,7 @@ namespace NeuralNetwork.Model
 
             if (answer != null)
             {
-                Matrix<double> error = GetError(LastNeurons.I, answer);
+                Matrix<double> error = GetError(LastNeurons.O, answer);
                 this.Errors.Add(error);
             }
 

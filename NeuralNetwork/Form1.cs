@@ -13,6 +13,7 @@ using NeuralNetwork.Model;
 using MathNet.Numerics.LinearAlgebra.Double;
 using NeuralNetwork.Model.Initializers;
 using NeuralNetwork.Auxiliar.Enum;
+using NeuralNetwork.Auxiliar.Interface;
 
 namespace NeuralNetwork
 {
@@ -21,32 +22,36 @@ namespace NeuralNetwork
         public Form1()
         {
             InitializeComponent();
-            InitializeNeuralNetwork();
+            InitializeNeuralNetworkNew();
+            InitializeNeuralNetworkOld();
+
+            UsedNn = nnOld;
 
             //ExcelTestTwoSixThreeTwo();
 
         }
 
-        private void InitializeNeuralNetwork()
+        private void InitializeNeuralNetworkNew()
         {
             nn = new NeuralNetworkCls();
+            nn.FunctionInitializer = new FunctionInitializerReluAndSimple();
             nn.Create(new int[] { 2, 6, 3, 1 });
-            //nn.NnInitializer = new NnInitializerTwoSixThreeTwo();
-            //nn.IsExcelTest = true;
+            nn.NnInitializer = new NnInitializerTwoSixThreeOne();
             nn.Initialize();
-            nn.LastNeurons.ResultType = ResultEnum.Sigmoid; // Softmax doesn't work when the ouput layer has only one neuron
-            //nn.Forward(new double[] { 1, 2 }, new double[] { 1, 0 });
         }
 
-        private void ExcelTestTwoSixThreeTwo()
-        {
-            nn = new NeuralNetworkCls();
-            nn.Create(new int[] { 2, 6, 3, 2 });
-            nn.NnInitializer = new NnInitializerTwoSixThreeTwo();
-            nn.IsExcelTest = true;
-            nn.Initialize();
-            nn.Forward(new double[] { 1, 2 }, new double[] { 1, 0 });
-        }
+        INeuralNetwork UsedNn;
+
+        //private void ExcelTestTwoSixThreeTwo()
+        //{
+        //    nn = new NeuralNetworkCls();
+        //    nn.Create(new int[] { 2, 6, 3, 2 });
+        //    nn.NnInitializer = new NnInitializerTwoSixThreeTwo();
+        //    nn.IsExcelTest = true;
+        //    FunctionInitializerReluAndSimple
+        //    nn.Initialize();
+        //    nn.Forward(new double[] { 1, 2 }, new double[] { 1, 0 });
+        //}
 
         ///// <summary>
         ///// This tests if the neural network still does the Forward and Backpropagation properly. The expected results are in the file Nn.xlsx
@@ -61,15 +66,15 @@ namespace NeuralNetwork
         //    nn.Forward(new double[] { 0.1, 0.2, 0.7 }, new double[] { 1, 0, 0 });
         //}
 
-        //private NeuralNetworkOld nnOld;
+        private NeuralNetworkOld nnOld;
         private NeuralNetworkCls nn;
 
-        //private void InitializeNeuralNetworkOld()
-        //{
-        //    nnOld = new NeuralNetworkOld();
-        //    nnOld.Create(new int[] { 2, 2, 1 });
-        //    nnOld.Initialize();
-        //}
+        private void InitializeNeuralNetworkOld()
+        {
+            nnOld = new NeuralNetworkOld();
+            nnOld.Create(new int[] { 2, 2, 1 });
+            nnOld.Initialize();
+        }
 
         private void Form1_Load(object sender, EventArgs e)
         {
@@ -85,16 +90,16 @@ namespace NeuralNetwork
         {
             Matrix<double> output;
 
-            output = nn.Guess(_input1);
+            output = UsedNn.Guess(_input1);
             label1.Text = output[0, 0].ToString();
 
-            output = nn.Guess(_input2);
+            output = UsedNn.Guess(_input2);
             label2.Text = output[0, 0].ToString();
 
-            output = nn.Guess(_input3);
+            output = UsedNn.Guess(_input3);
             label3.Text = output[0, 0].ToString();
 
-            output = nn.Guess(_input4);
+            output = UsedNn.Guess(_input4);
             label4.Text = output[0, 0].ToString();
         }
 
@@ -129,7 +134,7 @@ namespace NeuralNetwork
 
         private void RecreateNn_Click(object sender, EventArgs e)
         {
-            InitializeNeuralNetwork();
+            InitializeNeuralNetworkNew();
         }
 
         private void Train_Click(object sender, EventArgs e)
@@ -141,11 +146,11 @@ namespace NeuralNetwork
         {
             List<double[]> inputs = new List<double[]>();
 
-            for (int i = 0; i < 1000; i++)
+            for (int i = 0; i < 10000; i++)
             {
                 inputs.Add(_input1);
-                //inputs.Add(_input2);
-                //inputs.Add(_input3);
+                inputs.Add(_input2);
+                inputs.Add(_input3);
                 inputs.Add(_input4);
             }
 
@@ -154,7 +159,7 @@ namespace NeuralNetwork
             foreach (double[] input in inputs)
             {
                 double[] answer = GetAnswer(input);
-                nn.Forward(input, answer);
+                UsedNn.Forward(input, answer);
             }
         }
 

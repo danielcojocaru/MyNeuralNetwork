@@ -9,6 +9,8 @@ namespace NeuralNetwork.Auxiliar.Enum
     public enum ErrorEvaluatorEnum
     {
         Logaritmic,
-        Crossentropy
+        Crossentropy,
+        Simple,
+        Square
     }
 }
