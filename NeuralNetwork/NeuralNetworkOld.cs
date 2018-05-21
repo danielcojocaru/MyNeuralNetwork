@@ -16,6 +16,8 @@ namespace NeuralNetwork
         public LayerOld FirstLayer { get; set; }
         public LayerOld LastLayer { get; set; }
 
+        public INeuralNetworkInitializer NnInitializer { get; set; }
+
         public NeuralNetworkOld()
         {}
 
@@ -37,12 +39,12 @@ namespace NeuralNetwork
 
                 if (i == 0)
                 {
-                    layer.Create(nrOfOutputs);
+                    layer.Create(this, nrOfOutputs);
                 }
                 else
                 {
                     int nrOfInputs = layers[i - 1];
-                    layer.Create(nrOfOutputs, nrOfInputs);
+                    layer.Create(this, nrOfOutputs, nrOfInputs);
 
                     // ading the neighbors layers references
                     layer.Previous = lastLayer;
@@ -56,15 +58,7 @@ namespace NeuralNetwork
 
         public void Initialize()
         {
-            RandomizeLayers();
-        }
-
-        private void RandomizeLayers()
-        {
-            foreach (LayerOld layer in Layers)
-            {
-                layer.Randomize();
-            }
+            FirstLayer.Initialize(index : -1);
         }
 
         public Matrix<double> Guess(double[] input)
@@ -73,10 +67,14 @@ namespace NeuralNetwork
             return output;
         }
 
-        public void Forward(double[] input, double[] targets)
+        public void Forward(double[] input, double[] targets, bool doBackpropagation = true)
         {
             FirstLayer.Guess(input);
-            LastLayer.Backwards(targets);
+
+            if (doBackpropagation)
+            {
+                LastLayer.Backwards(targets);
+            }
         }
 
         public void PrintToExcel()
@@ -168,21 +166,5 @@ namespace NeuralNetwork
             return list;
         }
 
-        //public Matrix<double> Guess(double[] input)
-        //{
-        //    Layers[0].Guess(input);
-
-        //    for (int i = 1; i < Layers.Count; i++)
-        //    {
-        //        Layer inputLayer = Layers[i - 1];
-        //        Layer outputLayer = Layers[i];
-
-        //        outputLayer.FeedInput(inputLayer);
-        //    }
-
-        //    Matrix<double> output = Layers[Layers.Count - 1].X;
-        //    Console.WriteLine(output);
-        //    return output;
-        //}
     }
 }

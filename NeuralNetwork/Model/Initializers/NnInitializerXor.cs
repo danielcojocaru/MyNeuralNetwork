@@ -9,44 +9,27 @@ using System.Threading.Tasks;
 
 namespace NeuralNetwork.Model.Initializers
 {
-    [Serializable]
-    public class NnInitializerTwoSixThreeOne : INeuralNetworkInitializer
+    public class NnInitializerXor : INeuralNetworkInitializer
     {
         public List<Matrix<double>> WList { get; set; } = new List<Matrix<double>>()
         {
              DenseMatrix.OfArray(new double[,] {
                 {   0.1     ,   0.2     },
-                {   0.3     ,   0.3     },
-                {   0.2     ,   0.5     },
-                {   0.7     ,   0.8     },
-                {   0.2     ,   0.3     },
-                {   0.5     ,   0.7     }}),
+                {   0.3     ,   0.3     }}),
              DenseMatrix.OfArray(new double[,] {
-                {   0.1     ,   0.2     ,   0.2     ,   0.5     ,   0.4     ,   0.4     },
-                {   0.3     ,   0.5     ,   0.9     ,   0.4     ,   0.3     ,   0.2     },
-                {   0.8     ,   0.4     ,   0.2     ,   0.1     ,   0.9     ,   0.6     }}),
-             DenseMatrix.OfArray(new double[,] {
-                {   0.1     ,   0.2     ,   0.2     }}),
+                {   0.1     ,   0.2     }}),
         };
 
         public List<Matrix<double>> BList { get; set; } = new List<Matrix<double>>()
         {
              DenseMatrix.OfArray(new double[,] {
                 {   0.1     },
-                {   0.2     },
-                {   0.3     },
-                {   0.4     },
-                {   0.5     },
-                {   0.6     }}),
-            DenseMatrix.OfArray(new double[,] {
-                {   0.1     },
-                {   0.2     },
-                {   0.3     }}),
+                {   0.2     }}),
              DenseMatrix.OfArray(new double[,] {
                 {   0.1     }}),
         };
 
-        public NnInitializerTwoSixThreeOne()
+        public NnInitializerXor()
         {
         }
 

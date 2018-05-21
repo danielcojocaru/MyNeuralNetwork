@@ -132,7 +132,7 @@ namespace NeuralNetwork.Model
             Forward(input, answer, doBackpropagation : true);
         }
 
-        public void Forward(double[] input, double[] answer = null, bool? doBackpropagation = true)
+        public void Forward(double[] input, double[] answer = null, bool doBackpropagation = true)
         {
             if (doBackpropagation == true)
             {
@@ -157,6 +157,7 @@ namespace NeuralNetwork.Model
         private void Backpropagation()
         {
             Matrix<double> error = GetGeneralError(Errors);
+            Errors = new List<Matrix<double>>();
             LastNeurons.Backpropagation(error);
         }
 
@@ -238,5 +239,6 @@ namespace NeuralNetwork.Model
             }
         }
 
+        
     }
 }

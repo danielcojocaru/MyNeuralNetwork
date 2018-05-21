@@ -13,33 +13,38 @@ namespace NeuralNetwork
 
         public static double _lr = 0.2;
 
-        public Matrix<double> X { get; set; }
+        public Matrix<double> O { get; set; }
         public Matrix<double> W { get; set; }
         public Matrix<double> B { get; set; }
         public Matrix<double> E { get; set; }
 
         public LayerOld Previous { get; set; }
         public LayerOld Next { get; set; }
+        public NeuralNetworkOld Parent { get; set; }
 
         private Random rnd = new Random();
 
         public LayerOld()
         { }
 
-        public void Create(int nrOfOutputs)
+        public void Create(NeuralNetworkOld parent, int nrOfOutputs)
         {
+            Parent = parent;
+
             CreateXAndB(nrOfOutputs);
         }
 
-        public void Create(int nrOfOutputs, int nrOfInputs)
+        public void Create(NeuralNetworkOld parent, int nrOfOutputs, int nrOfInputs)
         {
+            Parent = parent;
+
             CreateXAndB(nrOfOutputs);
             CreateWAndE(nrOfOutputs, nrOfInputs);
         }
 
         private void CreateXAndB(int nrOfOutputs)
         {
-            this.X = Matrix<double>.Build.Dense(nrOfOutputs, 1);
+            this.O = Matrix<double>.Build.Dense(nrOfOutputs, 1);
             this.B = Matrix<double>.Build.Dense(nrOfOutputs, 1);
         }
 
@@ -49,10 +54,26 @@ namespace NeuralNetwork
             this.W = Matrix<double>.Build.Dense(nrOfOutputs, nrOfInputs);
         }
 
-        public void Randomize()
+        public void Initialize(int index)
         {
-            Randomize(this.W);
-            Randomize(this.B);
+            if (index >= 0)
+            {
+                if (Parent.NnInitializer != null)
+                {
+                    W = Parent.NnInitializer.GetW(index);
+                    B = Parent.NnInitializer.GetB(index);
+                }
+                else
+                {
+                    Randomize(this.W);
+                    Randomize(this.B);
+                }
+            }
+
+            if (Next != null)
+            {
+                Next.Initialize(++index);
+            }
         }
 
         private void Randomize(Matrix<double> matrix)
@@ -115,10 +136,21 @@ namespace NeuralNetwork
 
         #region Forward
 
+        public Matrix<double> I { get; set; }
+
         public Matrix<double> FeedInput()
         {
-            Matrix<double> I = Previous.X;
-            this.X = Sigmoid(W.Multiply(I).Add(B));
+            I = Previous.O;
+            this.O = Sigmoid(W.Multiply(I).Add(B));
+
+            //Console.WriteLine("W:");
+            //Console.WriteLine(W);
+            //Console.WriteLine("I:");
+            //Console.WriteLine(I);
+            //Console.WriteLine("B:");
+            //Console.WriteLine(B);
+            //Console.WriteLine("O:");
+            //Console.WriteLine(O);
 
             if (Next != null)
             {
@@ -126,7 +158,9 @@ namespace NeuralNetwork
             }
             else
             {
-                return X;
+                //Console.WriteLine("OLD:");
+                //Console.WriteLine(O);
+                return O;
             }
         }
 
@@ -139,9 +173,9 @@ namespace NeuralNetwork
 
         private void SetX(double[] input)
         {
-            for (int i = 0; i < this.X.RowCount; i++)
+            for (int i = 0; i < this.O.RowCount; i++)
             {
-                X[i, 0] = input[i];
+                O[i, 0] = input[i];
             }
         }
 
@@ -166,9 +200,9 @@ namespace NeuralNetwork
         private void ModifyWAndBLocal()
         {
             Matrix<double> newE = E.Multiply(_lr);
-            Matrix<double> gradients = CopyAndApplyFunction(this.X, DSigmoid);
+            Matrix<double> gradients = CopyAndApplyFunction(this.O, DSigmoid);
             Matrix<double> deltaB = SimpleMultiply(newE, gradients);
-            Matrix<double> deltaW = deltaB.Multiply(Previous.X.Transpose());
+            Matrix<double> deltaW = deltaB.Multiply(Previous.O.Transpose());
 
             this.B = this.B.Add(deltaB);
             this.W = this.W.Add(deltaW);
@@ -212,7 +246,7 @@ namespace NeuralNetwork
 
                 //E[i, 0] = Math.Pow(targets[i] - X[i, 0], 2) * minusPlus;
 
-                E[i, 0] = targets[i] - X[i, 0];
+                E[i, 0] = targets[i] - O[i, 0];
             }
         }
     }

@@ -25,22 +25,32 @@ namespace NeuralNetwork
             InitializeNeuralNetworkNew();
             InitializeNeuralNetworkOld();
 
-            UsedNn = nnOld;
+            UsedNn = nnNew;
 
+            TrainNn3();
             //ExcelTestTwoSixThreeTwo();
 
         }
 
+        private INeuralNetwork UsedNn;
+
         private void InitializeNeuralNetworkNew()
         {
-            nn = new NeuralNetworkCls();
-            nn.FunctionInitializer = new FunctionInitializerReluAndSimple();
-            nn.Create(new int[] { 2, 6, 3, 1 });
-            nn.NnInitializer = new NnInitializerTwoSixThreeOne();
-            nn.Initialize();
+            nnNew = new NeuralNetworkCls();
+            nnNew.FunctionInitializer = new FunctionInitializerSigmoidAndSimple();
+            nnNew.NnInitializer = new NnInitializerXor();
+            nnNew.Create(new int[] { 2, 2, 1 });
+            nnNew.Initialize();
         }
 
-        INeuralNetwork UsedNn;
+        private void InitializeNeuralNetworkOld()
+        {
+            nnOld = new NeuralNetworkOld();
+            nnOld.NnInitializer = new NnInitializerXor();
+            nnOld.Create(new int[] { 2, 2, 1 });
+            nnOld.Initialize();
+        }
+
 
         //private void ExcelTestTwoSixThreeTwo()
         //{
@@ -67,14 +77,9 @@ namespace NeuralNetwork
         //}
 
         private NeuralNetworkOld nnOld;
-        private NeuralNetworkCls nn;
+        private NeuralNetworkCls nnNew;
 
-        private void InitializeNeuralNetworkOld()
-        {
-            nnOld = new NeuralNetworkOld();
-            nnOld.Create(new int[] { 2, 2, 1 });
-            nnOld.Initialize();
-        }
+        
 
         private void Form1_Load(object sender, EventArgs e)
         {
@@ -159,7 +164,60 @@ namespace NeuralNetwork
             foreach (double[] input in inputs)
             {
                 double[] answer = GetAnswer(input);
-                UsedNn.Forward(input, answer);
+
+                //Console.WriteLine("OLD:");
+                //nnOld.Forward(input, answer, doBackpropagation: true);
+
+                //Console.WriteLine("NEW:");
+                nnNew.Forward(input, answer, doBackpropagation: true);
+
+                //Console.WriteLine("OLD:");
+                //Console.WriteLine("1:");
+                //Console.WriteLine("W:");
+                //Console.WriteLine(nnOld.Layers[1].W);
+                //Console.WriteLine("B:");
+                //Console.WriteLine(nnOld.Layers[1].B);
+                //Console.WriteLine("I:");
+                //Console.WriteLine(nnOld.Layers[1].I);
+                //Console.WriteLine("O:");
+                //Console.WriteLine(nnOld.Layers[1].O);
+                //Console.WriteLine("2:");
+                //Console.WriteLine("W:");
+                //Console.WriteLine(nnOld.Layers[2].W);
+                //Console.WriteLine("B:");
+                //Console.WriteLine(nnOld.Layers[2].B);
+                //Console.WriteLine("I:");
+                //Console.WriteLine(nnOld.Layers[1].I);
+                //Console.WriteLine("O:");
+                //Console.WriteLine(nnOld.Layers[2].O);
+
+
+                //Console.WriteLine("NEW:");
+                //Console.WriteLine("1:");
+                //Console.WriteLine("W:");
+                //Console.WriteLine((nnNew.NeuronsAndSynappses[1] as Synapses).W);
+                //Console.WriteLine("B:");
+                //Console.WriteLine((nnNew.NeuronsAndSynappses[1] as Synapses).B);
+                //Console.WriteLine("I:");
+                //Console.WriteLine((nnNew.NeuronsAndSynappses[2] as Neurons).I);
+                //Console.WriteLine("O:");
+                //Console.WriteLine((nnNew.NeuronsAndSynappses[2] as Neurons).O);
+                //Console.WriteLine("2:");
+                //Console.WriteLine("W:");
+                //Console.WriteLine((nnNew.NeuronsAndSynappses[3] as Synapses).W);
+                //Console.WriteLine("B:");
+                //Console.WriteLine((nnNew.NeuronsAndSynappses[3] as Synapses).B);
+                //Console.WriteLine("I:");
+                //Console.WriteLine((nnNew.NeuronsAndSynappses[4] as Neurons).I);
+                //Console.WriteLine("O:");
+                //Console.WriteLine((nnNew.NeuronsAndSynappses[4] as Neurons).O);
+
+
+
+
+
+
+
             }
         }
 
@@ -195,7 +253,39 @@ namespace NeuralNetwork
             }
         }
 
-        
+        private double[] GetAnswer2(double[] input)
+        {
+            bool one = input[0] == 1;
+            bool two = input[1] == 1;
+            bool result = one == two;
+
+            if (result)
+            {
+                return new double[] { 1 };
+            }
+            else
+            {
+                return new double[] { 0 };
+            }
+        }
+
+        private double[] GetAnswer3(double[] input)
+        {
+            bool one = input[0] == 1;
+            bool two = input[1] == 1;
+            bool result = one == two;
+
+            if (two)
+            {
+                return new double[] { 1 };
+            }
+            else
+            {
+                return new double[] { 0 };
+            }
+        }
+
+
 
         public static void Shuffle<T>(List<T> list)
         {

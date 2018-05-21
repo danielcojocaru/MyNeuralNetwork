@@ -264,11 +264,26 @@ namespace NeuralNetwork.Model
             I = w.Multiply(o).Add(b);
             O = OutputFunc(I);
 
+            //Console.WriteLine("W:");
+            //Console.WriteLine(w);
+            //Console.WriteLine("I:");
+            //Console.WriteLine(o);
+            //Console.WriteLine("B:");
+            //Console.WriteLine(b);
+            //Console.WriteLine("O:");
+            //Console.WriteLine(O);
+
             PrintForwardStep(Parent.PrintStep);
 
             if (NextSy != null)
             {
                 NextSy.Forward(O);
+            }
+            else
+            {
+                // forward finished
+                //Console.WriteLine("NEW:");
+                //Console.WriteLine(O);
             }
         }
 
@@ -276,6 +291,16 @@ namespace NeuralNetwork.Model
         {
             SetI(input);
             O = OutputFunc(I);
+
+            //Console.WriteLine("W:");
+            //Console.WriteLine(W);
+            //Console.WriteLine("I:");
+            //Console.WriteLine(I);
+            //Console.WriteLine("B:");
+            //Console.WriteLine(B);
+            //Console.WriteLine("O:");
+            //Console.WriteLine(O);
+
 
             PrintForwardStep(Parent.PrintStep);
 

@@ -64,9 +64,11 @@
     </Compile>
     <Compile Include="LayerOld.cs" />
     <Compile Include="Model\Initializers\FunctionInitializerReluAndSimple.cs" />
+    <Compile Include="Model\Initializers\FunctionInitializerSigmoidAndSimple.cs" />
     <Compile Include="Model\Initializers\NnInitializerMediumDotComExample.cs" />
     <Compile Include="Model\Initializers\NnInitializerTwoSixThreeOne.cs" />
     <Compile Include="Model\Initializers\NnInitializerTwoSixThreeTwo.cs" />
+    <Compile Include="Model\Initializers\NnInitializerXor.cs" />
     <Compile Include="Model\NeuralNetworkCls.cs" />
     <Compile Include="Model\Neurons.cs" />
     <Compile Include="Model\Synapses.cs" />
