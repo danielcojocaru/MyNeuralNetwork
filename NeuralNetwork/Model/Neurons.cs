@@ -166,7 +166,8 @@ namespace NeuralNetwork.Model
 
         private double SigmoidPrime(double input)
         {
-            double output = 1 / (1 + Math.Exp(input)) * (1 - 1 / (1 + Math.Exp(input)));
+            //double output = 1 / (1 + Math.Exp(input)) * (1 - 1 / (1 + Math.Exp(input)));
+            double output = input * (1 - input);
             return output;
         }
 
@@ -344,26 +345,49 @@ namespace NeuralNetwork.Model
                 ;
         }
 
-        public void Backpropagation(Matrix<double> errorOrEOnI)
+        public void Backpropagation(Matrix<double> error)
         {
+            Console.WriteLine("NEW: Received E:");
+            Console.WriteLine(error);
+
             // It's the Output-layer with neurons
             if (NextSy == null)
             {
-                Matrix<double> error = errorOrEOnI; // just for the understanding of the code
-                Matrix<double> diagonalError = error.GetFirstColumnAsDiagonalMatrix();
-                Matrix<double> oOnI = OonIFunc();
-                Matrix<double> eOnI = diagonalError.Multiply(oOnI);
+                //OLD:
+                //Matrix<double> error = errorOrEOnI; // just for the understanding of the code
+                //Matrix<double> diagonalError = error.GetFirstColumnAsDiagonalMatrix();
+                //Matrix<double> oOnI = OonIFunc();
+                //Matrix<double> eOnI = diagonalError.Multiply(oOnI);
 
+                //PrevSy.Backpropagation(eOnI);
+
+
+                Matrix<double> oOnI = OonIFunc();
+                Matrix<double> eOnI = SimpleMultiply(error, oOnI);
+
+                Console.WriteLine("NEW: Sended E:");
+                Console.WriteLine(eOnI);
                 PrevSy.Backpropagation(eOnI);
+
             }
             // It's a hidden Neural-layer but (not the first or the last)
             else if (PrevSy != null)
             {
-                Matrix<double> eOnIPrev = errorOrEOnI; // just for the understanding of the code
-                Matrix<double> eOnO = eOnIPrev.Transpose().Multiply(NextSy.W);
-                Matrix<double> oOnI = OonIFunc();
-                Matrix<double> eOnI = eOnO.GetFirstRowAsDiagonalMatrix().Multiply(oOnI);
+                //OLD:
+                //Matrix<double> eOnIPrev = errorOrEOnI; // just for the understanding of the code
+                //Matrix<double> eOnO = eOnIPrev.Transpose().Multiply(NextSy.W);
+                //Matrix<double> oOnI = OonIFunc();
+                //Matrix<double> eOnI = eOnO.GetFirstRowAsDiagonalMatrix().Multiply(oOnI);
 
+                //PrevSy.Backpropagation(eOnI);
+
+
+                Matrix<double> eOnO = NextSy.W.Transpose().Multiply(error);
+                Matrix<double> oOnI = OonIFunc();
+                Matrix<double> eOnI = SimpleMultiply(eOnO, oOnI);
+
+                Console.WriteLine("NEW: Sended E:");
+                Console.WriteLine(eOnI);
                 PrevSy.Backpropagation(eOnI);
             }
             // It's the input Neural-layer
@@ -371,6 +395,21 @@ namespace NeuralNetwork.Model
             {
                 NextSy.ApplyDeltas();
             }
+        }
+
+        private Matrix<double> SimpleMultiply(Matrix<double> first, Matrix<double> second)
+        {
+            Matrix<double> toReturn = Matrix<double>.Build.Dense(first.RowCount, first.ColumnCount);
+
+            for (int i = 0; i < first.RowCount; i++)
+            {
+                for (int j = 0; j < first.ColumnCount; j++)
+                {
+                    toReturn[i, j] = first[i, j] *= second[i, j];
+                }
+            }
+
+            return toReturn;
         }
 
     }

@@ -101,7 +101,11 @@ namespace NeuralNetwork.Model
             //Matrix<double> eOnW = eOnI.Multiply(oOnW);
 
             dB = eOnI * Parent.Lr;
-            dW = eOnI.Multiply(oOnW) * Parent.Lr;
+
+            //Console.WriteLine("Synapsen dB:");
+            //Console.WriteLine(dB);
+
+            dW = dB.Multiply(oOnW);
 
             //Console.WriteLine(dB);
             //Console.WriteLine(dW);

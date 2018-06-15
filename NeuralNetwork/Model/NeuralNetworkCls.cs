@@ -149,6 +149,9 @@ namespace NeuralNetwork.Model
 
             if (doBackpropagation == true && Epochs >= MaxEpochs)
             {
+                //Console.WriteLine("Output in NeuralNetworkCls:");
+                //Console.WriteLine(LastNeurons.O);
+
                 Epochs = 0;
                 Backpropagation();
             }

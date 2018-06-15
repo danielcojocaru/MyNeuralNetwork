@@ -73,6 +73,9 @@ namespace NeuralNetwork
 
             if (doBackpropagation)
             {
+                //Console.WriteLine("Output in NeuralNetworkOld:");
+                //Console.WriteLine(LastLayer.O);
+
                 LastLayer.Backwards(targets);
             }
         }

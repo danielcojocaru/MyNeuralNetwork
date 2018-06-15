@@ -27,7 +27,8 @@ namespace NeuralNetwork
 
             UsedNn = nnNew;
 
-            TrainNn3();
+            Compare_Click(null, null);
+            //TrainNn3();
             //ExcelTestTwoSixThreeTwo();
 
         }
@@ -51,35 +52,8 @@ namespace NeuralNetwork
             nnOld.Initialize();
         }
 
-
-        //private void ExcelTestTwoSixThreeTwo()
-        //{
-        //    nn = new NeuralNetworkCls();
-        //    nn.Create(new int[] { 2, 6, 3, 2 });
-        //    nn.NnInitializer = new NnInitializerTwoSixThreeTwo();
-        //    nn.IsExcelTest = true;
-        //    FunctionInitializerReluAndSimple
-        //    nn.Initialize();
-        //    nn.Forward(new double[] { 1, 2 }, new double[] { 1, 0 });
-        //}
-
-        ///// <summary>
-        ///// This tests if the neural network still does the Forward and Backpropagation properly. The expected results are in the file Nn.xlsx
-        ///// </summary>
-        //private void ExcelTest()
-        //{
-        //    nn = new NeuralNetworkCls();
-        //    nn.Create(new int[] { 3, 3, 3, 3 });
-        //    nn.NnInitializer = new NnInitializerMediumDotComExample();
-        //    nn.IsExcelTest = true;
-        //    nn.Initialize();
-        //    nn.Forward(new double[] { 0.1, 0.2, 0.7 }, new double[] { 1, 0, 0 });
-        //}
-
         private NeuralNetworkOld nnOld;
         private NeuralNetworkCls nnNew;
-
-        
 
         private void Form1_Load(object sender, EventArgs e)
         {
@@ -165,77 +139,9 @@ namespace NeuralNetwork
             {
                 double[] answer = GetAnswer(input);
 
-                //Console.WriteLine("OLD:");
-                //nnOld.Forward(input, answer, doBackpropagation: true);
-
-                //Console.WriteLine("NEW:");
-                nnNew.Forward(input, answer, doBackpropagation: true);
-
-                //Console.WriteLine("OLD:");
-                //Console.WriteLine("1:");
-                //Console.WriteLine("W:");
-                //Console.WriteLine(nnOld.Layers[1].W);
-                //Console.WriteLine("B:");
-                //Console.WriteLine(nnOld.Layers[1].B);
-                //Console.WriteLine("I:");
-                //Console.WriteLine(nnOld.Layers[1].I);
-                //Console.WriteLine("O:");
-                //Console.WriteLine(nnOld.Layers[1].O);
-                //Console.WriteLine("2:");
-                //Console.WriteLine("W:");
-                //Console.WriteLine(nnOld.Layers[2].W);
-                //Console.WriteLine("B:");
-                //Console.WriteLine(nnOld.Layers[2].B);
-                //Console.WriteLine("I:");
-                //Console.WriteLine(nnOld.Layers[1].I);
-                //Console.WriteLine("O:");
-                //Console.WriteLine(nnOld.Layers[2].O);
-
-
-                //Console.WriteLine("NEW:");
-                //Console.WriteLine("1:");
-                //Console.WriteLine("W:");
-                //Console.WriteLine((nnNew.NeuronsAndSynappses[1] as Synapses).W);
-                //Console.WriteLine("B:");
-                //Console.WriteLine((nnNew.NeuronsAndSynappses[1] as Synapses).B);
-                //Console.WriteLine("I:");
-                //Console.WriteLine((nnNew.NeuronsAndSynappses[2] as Neurons).I);
-                //Console.WriteLine("O:");
-                //Console.WriteLine((nnNew.NeuronsAndSynappses[2] as Neurons).O);
-                //Console.WriteLine("2:");
-                //Console.WriteLine("W:");
-                //Console.WriteLine((nnNew.NeuronsAndSynappses[3] as Synapses).W);
-                //Console.WriteLine("B:");
-                //Console.WriteLine((nnNew.NeuronsAndSynappses[3] as Synapses).B);
-                //Console.WriteLine("I:");
-                //Console.WriteLine((nnNew.NeuronsAndSynappses[4] as Neurons).I);
-                //Console.WriteLine("O:");
-                //Console.WriteLine((nnNew.NeuronsAndSynappses[4] as Neurons).O);
-
-
-
-
-
-
-
+                UsedNn.Forward(input, answer, doBackpropagation: true);
             }
         }
-
-        //private void TrainNn2()
-        //{
-        //    double[][] allInputs = { _input1, _input2, _input3, _input4 };
-        //    List<double[]> inputs = allInputs.ToList();
-
-        //    for (int i = 0; i < 10000; i++)
-        //    {
-        //        Shuffle(inputs);
-        //        foreach (double[] input in inputs)
-        //        {
-        //            double[] answer = GetAnswer(input);
-        //            nn.Train(input, answer);
-        //        }
-        //    }
-        //}
 
         private double[] GetAnswer(double[] input)
         {
@@ -285,8 +191,6 @@ namespace NeuralNetwork
             }
         }
 
-
-
         public static void Shuffle<T>(List<T> list)
         {
             RNGCryptoServiceProvider provider = new RNGCryptoServiceProvider();
@@ -321,43 +225,30 @@ namespace NeuralNetwork
 
         private void SetWAndB_Click(object sender, EventArgs e)
         {
-            //LayerOld l1 = nnOld.Layers[1];
-            //l1.W[0, 0] = 20;
-            //l1.W[0, 1] = 20;
-            //l1.W[1, 0] = -20;
-            //l1.W[1, 1] = -20;
-
-            //l1.B[0, 0] = -10;
-            //l1.B[1, 0] = 30;
-
-            //LayerOld l2 = nnOld.Layers[2];
-            //l2.W[0, 0] = 20;
-            //l2.W[0, 1] = 20;
-            //l2.B[0, 0] = -30;
         }
 
         private void SetAt75_Click(object sender, EventArgs e)
         {
-            //LayerOld l1 = nnOld.Layers[1];
-            //l1.W[0, 0] = 15;
-            //l1.W[0, 1] = 10;
-            //l1.W[1, 0] = -15;
-            //l1.W[1, 1] = -10;
-
-            //l1.B[0, 0] = -10;
-            //l1.B[1, 0] = 30;
-
-            //LayerOld l2 = nnOld.Layers[2];
-            //l2.W[0, 0] = 20;
-            //l2.W[0, 1] = 20;
-            //l2.B[0, 0] = -30;
         }
 
         private void button9_Click(object sender, EventArgs e)
         {
-            //nnOld.PrintToExcel();
         }
 
-        
+        private void Compare_Click(object sender, EventArgs e)
+        {
+            double[] input = _input2;
+            double[] answer = GetAnswer(input);
+
+
+            nnOld.Forward(input, answer, doBackpropagation: true);
+            nnNew.Forward(input, answer, doBackpropagation: true);
+
+            //Console.WriteLine("Old E:");
+            //Console.WriteLine(nnOld.LastLayer.E);
+
+            //Console.WriteLine(nnOld.Layers[1].B);
+            //Console.WriteLine(((Synapses)nnNew.NeuronsAndSynappses[1]).B);
+        }
     }
 }

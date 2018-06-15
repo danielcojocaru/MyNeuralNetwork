@@ -11,7 +11,7 @@ namespace NeuralNetwork
     {
         #region Basic
 
-        public static double _lr = 0.2;
+        public static double _lr = 0.1;
 
         public Matrix<double> O { get; set; }
         public Matrix<double> W { get; set; }
@@ -184,6 +184,10 @@ namespace NeuralNetwork
         public void Backwards(double[] targets)
         {
             CalculateErrors(targets);
+
+            Console.WriteLine("Old: E:");
+            Console.WriteLine(E);
+
             Previous.PropagateErrors();
             ModifyWAndB();
         }
@@ -201,8 +205,17 @@ namespace NeuralNetwork
         {
             Matrix<double> newE = E.Multiply(_lr);
             Matrix<double> gradients = CopyAndApplyFunction(this.O, DSigmoid);
+
+            //Console.WriteLine("Layer old O:");
+            //Console.WriteLine(O);
+            //Console.WriteLine("gradients:");
+            //Console.WriteLine(gradients);
+
             Matrix<double> deltaB = SimpleMultiply(newE, gradients);
             Matrix<double> deltaW = deltaB.Multiply(Previous.O.Transpose());
+
+            //Console.WriteLine("LayerOld dB:");
+            //Console.WriteLine(deltaB);
 
             this.B = this.B.Add(deltaB);
             this.W = this.W.Add(deltaW);
@@ -230,6 +243,10 @@ namespace NeuralNetwork
             if (Previous != null)
             {
                 this.E = Next.W.Transpose().Multiply(Next.E);
+
+                Console.WriteLine("OLD E:");
+                Console.WriteLine(E);
+
                 Previous.PropagateErrors();
             }
         }
