@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace NeuralNetwork.Model.Initializers
 {
-    public class FunctionInitializerSigmoidAndSimple : IFunctionInitializer
+    public class FunctionInitializerRandom : IFunctionInitializer
     {
         public ErrorEvaluatorEnum GetErrorEvaluatorEnum()
         {
@@ -20,6 +20,10 @@ namespace NeuralNetwork.Model.Initializers
             if (index == 0)
             {
                 return ResultEnum.Simple;
+            }
+            else if(index == 1)
+            {
+                return ResultEnum.Sigmoid;
             }
             else
             {

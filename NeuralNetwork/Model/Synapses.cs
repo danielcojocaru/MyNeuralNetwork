@@ -100,9 +100,6 @@ namespace NeuralNetwork.Model
             Matrix<double> oOnW = PrevNe.O.Transpose();
             //Matrix<double> eOnW = eOnI.Multiply(oOnW);
 
-
-
-
             dB = eOnI * Parent.Lr;
             dW = dB.Multiply(oOnW);
 
@@ -111,7 +108,8 @@ namespace NeuralNetwork.Model
             //Console.WriteLine(dB);
             //Console.WriteLine(dW);
 
-            PrevNe.Backpropagation(eOnI);
+            PrevNe.Backpropagation(NextNe.E);
+            //PrevNe.Backpropagation(eOnI);
         }
 
         public void ApplyDeltas()

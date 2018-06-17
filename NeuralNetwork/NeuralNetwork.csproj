@@ -64,7 +64,7 @@
     </Compile>
     <Compile Include="LayerOld.cs" />
     <Compile Include="Model\Initializers\FunctionInitializerReluAndSimple.cs" />
-    <Compile Include="Model\Initializers\FunctionInitializerSigmoidAndSimple.cs" />
+    <Compile Include="Model\Initializers\FunctionInitializerRandom.cs" />
     <Compile Include="Model\Initializers\NnInitializerMediumDotComExample.cs" />
     <Compile Include="Model\Initializers\NnInitializerTwoSixThreeOne.cs" />
     <Compile Include="Model\Initializers\NnInitializerTwoSixThreeTwo.cs" />

@@ -79,6 +79,7 @@ namespace NeuralNetwork.Model
 
         private double SimpleError(double expected, double received)
         {
+            //double toReturn = Math.Pow(received, 2) - Math.Pow(expected, 2);
             double toReturn = received - expected;
             return toReturn;
         }

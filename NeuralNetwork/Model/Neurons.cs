@@ -36,6 +36,7 @@ namespace NeuralNetwork.Model
 
         public Matrix<double> I { get; set; }
         public Matrix<double> O { get; set; }
+        public Matrix<double> E { get; set; }
 
         public Matrix<double> OonI { get; set; }
 
@@ -111,11 +112,6 @@ namespace NeuralNetwork.Model
         {
             throw new NotImplementedException();
         }
-
-        //private Matrix<double> GetOOrIMatrix()
-        //{
-        //    return NextSy == null ? O : I;
-        //}
 
         private Matrix<double> SimpleOutputFunc(Matrix<double> input)
         {
@@ -348,6 +344,7 @@ namespace NeuralNetwork.Model
                 //Console.WriteLine("NEW: oOnI (2):");
                 //Console.WriteLine(oOnI);
 
+                E = error;
                 Matrix<double> eOnI = SimpleMultiply(error, oOnI);
                 //Matrix<double> eOnI = oOnI;
 
@@ -374,6 +371,7 @@ namespace NeuralNetwork.Model
                 //Console.WriteLine(NextSy.W);
 
                 Matrix<double> eOnO = NextSy.W.Transpose().Multiply(error);
+                E = eOnO;
                 Matrix<double> oOnI = OonIFunc();
 
                 //Console.WriteLine("NEW: E (3):");

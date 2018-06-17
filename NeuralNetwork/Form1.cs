@@ -42,7 +42,7 @@ namespace NeuralNetwork
         private void InitializeNeuralNetworkNew()
         {
             nnNew = new NeuralNetworkCls();
-            nnNew.FunctionInitializer = new FunctionInitializerSigmoidAndSimple();
+            nnNew.FunctionInitializer = new FunctionInitializerRandom();
             //nnNew.NnInitializer = new NnInitializerXor();
             nnNew.Create(new int[] { 2, 2, 1 });
             nnNew.Initialize();
@@ -131,7 +131,7 @@ namespace NeuralNetwork
         {
             List<double[]> inputs = new List<double[]>();
 
-            for (int i = 0; i < 10000; i++)
+            for (int i = 0; i < 40000; i++)
             {
                 inputs.Add(_input1);
                 inputs.Add(_input2);
