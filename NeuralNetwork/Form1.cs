@@ -24,13 +24,17 @@ namespace NeuralNetwork
             InitializeComponent();
             InitializeNeuralNetworkNew();
             InitializeNeuralNetworkOld();
-
-            UsedNn = nnNew;
+            SetCurrentNn();
 
             Compare_Click(null, null);
             //TrainNn3();
             //ExcelTestTwoSixThreeTwo();
 
+        }
+
+        private void SetCurrentNn()
+        {
+            UsedNn = nnNew;
         }
 
         private INeuralNetwork UsedNn;
@@ -39,7 +43,7 @@ namespace NeuralNetwork
         {
             nnNew = new NeuralNetworkCls();
             nnNew.FunctionInitializer = new FunctionInitializerSigmoidAndSimple();
-            nnNew.NnInitializer = new NnInitializerXor();
+            //nnNew.NnInitializer = new NnInitializerXor();
             nnNew.Create(new int[] { 2, 2, 1 });
             nnNew.Initialize();
         }
@@ -47,7 +51,7 @@ namespace NeuralNetwork
         private void InitializeNeuralNetworkOld()
         {
             nnOld = new NeuralNetworkOld();
-            nnOld.NnInitializer = new NnInitializerXor();
+            //nnOld.NnInitializer = new NnInitializerXor();
             nnOld.Create(new int[] { 2, 2, 1 });
             nnOld.Initialize();
         }
@@ -114,6 +118,8 @@ namespace NeuralNetwork
         private void RecreateNn_Click(object sender, EventArgs e)
         {
             InitializeNeuralNetworkNew();
+            InitializeNeuralNetworkOld();
+            SetCurrentNn();
         }
 
         private void Train_Click(object sender, EventArgs e)
@@ -249,6 +255,13 @@ namespace NeuralNetwork
 
             //Console.WriteLine(nnOld.Layers[1].B);
             //Console.WriteLine(((Synapses)nnNew.NeuronsAndSynappses[1]).B);
+        }
+
+        private void RecreateTrainSeeResults_Click(object sender, EventArgs e)
+        {
+            RecreateNn_Click(null, null);
+            Train_Click(null, null);
+            CheckAnswer();
         }
     }
 }

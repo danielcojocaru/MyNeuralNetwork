@@ -100,13 +100,14 @@ namespace NeuralNetwork.Model
             Matrix<double> oOnW = PrevNe.O.Transpose();
             //Matrix<double> eOnW = eOnI.Multiply(oOnW);
 
+
+
+
             dB = eOnI * Parent.Lr;
+            dW = dB.Multiply(oOnW);
 
             //Console.WriteLine("Synapsen dB:");
             //Console.WriteLine(dB);
-
-            dW = dB.Multiply(oOnW);
-
             //Console.WriteLine(dB);
             //Console.WriteLine(dW);
 

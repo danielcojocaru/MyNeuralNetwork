@@ -45,6 +45,7 @@ namespace NeuralNetwork
             this.button9 = new System.Windows.Forms.Button();
             this.button10 = new System.Windows.Forms.Button();
             this.button11 = new System.Windows.Forms.Button();
+            this.button12 = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // button1
@@ -193,11 +194,22 @@ namespace NeuralNetwork
             this.button11.UseVisualStyleBackColor = true;
             this.button11.Click += new System.EventHandler(this.Compare_Click);
             // 
+            // button12
+            // 
+            this.button12.Location = new System.Drawing.Point(13, 165);
+            this.button12.Name = "button12";
+            this.button12.Size = new System.Drawing.Size(275, 23);
+            this.button12.TabIndex = 15;
+            this.button12.Text = "Recreate Train SeeResults";
+            this.button12.UseVisualStyleBackColor = true;
+            this.button12.Click += new System.EventHandler(this.RecreateTrainSeeResults_Click);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1071, 536);
+            this.Controls.Add(this.button12);
             this.Controls.Add(this.button11);
             this.Controls.Add(this.button10);
             this.Controls.Add(this.button9);
@@ -241,6 +253,7 @@ namespace NeuralNetwork
         private System.Windows.Forms.Button button9;
         private System.Windows.Forms.Button button10;
         private System.Windows.Forms.Button button11;
+        private System.Windows.Forms.Button button12;
     }
 }
 

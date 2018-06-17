@@ -185,8 +185,8 @@ namespace NeuralNetwork
         {
             CalculateErrors(targets);
 
-            Console.WriteLine("Old: E:");
-            Console.WriteLine(E);
+            //Console.WriteLine("Old: E:");
+            //Console.WriteLine(E);
 
             Previous.PropagateErrors();
             ModifyWAndB();
@@ -206,8 +206,8 @@ namespace NeuralNetwork
             Matrix<double> newE = E.Multiply(_lr);
             Matrix<double> gradients = CopyAndApplyFunction(this.O, DSigmoid);
 
-            //Console.WriteLine("Layer old O:");
-            //Console.WriteLine(O);
+            //Console.WriteLine("Layer old E:");
+            //Console.WriteLine(E);
             //Console.WriteLine("gradients:");
             //Console.WriteLine(gradients);
 
@@ -242,10 +242,15 @@ namespace NeuralNetwork
         {
             if (Previous != null)
             {
+                //Console.WriteLine("Old: Prev E (1):");
+                //Console.WriteLine(Next.E);
+                //Console.WriteLine("Old: W (2):");
+                //Console.WriteLine(Next.W);
+
                 this.E = Next.W.Transpose().Multiply(Next.E);
 
-                Console.WriteLine("OLD E:");
-                Console.WriteLine(E);
+                //Console.WriteLine("Old: E (3):");
+                //Console.WriteLine(E);
 
                 Previous.PropagateErrors();
             }

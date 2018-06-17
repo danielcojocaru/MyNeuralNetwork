@@ -260,19 +260,8 @@ namespace NeuralNetwork.Model
 
         public void Forward(Matrix<double> o, Matrix<double> w, Matrix<double> b)
         {
-            //Console.WriteLine(b);
-
             I = w.Multiply(o).Add(b);
             O = OutputFunc(I);
-
-            //Console.WriteLine("W:");
-            //Console.WriteLine(w);
-            //Console.WriteLine("I:");
-            //Console.WriteLine(o);
-            //Console.WriteLine("B:");
-            //Console.WriteLine(b);
-            //Console.WriteLine("O:");
-            //Console.WriteLine(O);
 
             PrintForwardStep(Parent.PrintStep);
 
@@ -292,16 +281,6 @@ namespace NeuralNetwork.Model
         {
             SetI(input);
             O = OutputFunc(I);
-
-            //Console.WriteLine("W:");
-            //Console.WriteLine(W);
-            //Console.WriteLine("I:");
-            //Console.WriteLine(I);
-            //Console.WriteLine("B:");
-            //Console.WriteLine(B);
-            //Console.WriteLine("O:");
-            //Console.WriteLine(O);
-
 
             PrintForwardStep(Parent.PrintStep);
 
@@ -347,8 +326,8 @@ namespace NeuralNetwork.Model
 
         public void Backpropagation(Matrix<double> error)
         {
-            Console.WriteLine("NEW: Received E:");
-            Console.WriteLine(error);
+            //Console.WriteLine("NEW: Received E:");
+            //Console.WriteLine(error);
 
             // It's the Output-layer with neurons
             if (NextSy == null)
@@ -363,10 +342,18 @@ namespace NeuralNetwork.Model
 
 
                 Matrix<double> oOnI = OonIFunc();
-                Matrix<double> eOnI = SimpleMultiply(error, oOnI);
 
-                Console.WriteLine("NEW: Sended E:");
-                Console.WriteLine(eOnI);
+                //Console.WriteLine("NEW: error (1):");
+                //Console.WriteLine(error);
+                //Console.WriteLine("NEW: oOnI (2):");
+                //Console.WriteLine(oOnI);
+
+                Matrix<double> eOnI = SimpleMultiply(error, oOnI);
+                //Matrix<double> eOnI = oOnI;
+
+                //Console.WriteLine("NEW: eOnI (3):");
+                //Console.WriteLine(eOnI);
+
                 PrevSy.Backpropagation(eOnI);
 
             }
@@ -381,13 +368,24 @@ namespace NeuralNetwork.Model
 
                 //PrevSy.Backpropagation(eOnI);
 
+                //Console.WriteLine("NEW: Prev E (1):");
+                //Console.WriteLine(error);
+                //Console.WriteLine("NEW: W (2):");
+                //Console.WriteLine(NextSy.W);
 
                 Matrix<double> eOnO = NextSy.W.Transpose().Multiply(error);
                 Matrix<double> oOnI = OonIFunc();
+
+                //Console.WriteLine("NEW: E (3):");
+                //Console.WriteLine(eOnO);
+
+                //Console.WriteLine("NEW: error (1):");
+                //Console.WriteLine(oOnI);
+                //Console.WriteLine("NEW: oOnI (2):");
+                //Console.WriteLine(oOnI);
+
                 Matrix<double> eOnI = SimpleMultiply(eOnO, oOnI);
 
-                Console.WriteLine("NEW: Sended E:");
-                Console.WriteLine(eOnI);
                 PrevSy.Backpropagation(eOnI);
             }
             // It's the input Neural-layer
@@ -405,10 +403,9 @@ namespace NeuralNetwork.Model
             {
                 for (int j = 0; j < first.ColumnCount; j++)
                 {
-                    toReturn[i, j] = first[i, j] *= second[i, j];
+                    toReturn[i, j] = first[i, j] * second[i, j];
                 }
             }
-
             return toReturn;
         }
 
