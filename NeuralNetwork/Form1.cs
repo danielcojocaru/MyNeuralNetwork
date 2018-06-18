@@ -14,22 +14,65 @@ using MathNet.Numerics.LinearAlgebra.Double;
 using NeuralNetwork.Model.Initializers;
 using NeuralNetwork.Auxiliar.Enum;
 using NeuralNetwork.Auxiliar.Interface;
+using System.IO;
+using NeuralNetwork.Worker;
 
 namespace NeuralNetwork
 {
     public partial class Form1 : Form
     {
+        private string filePath = @"C:\Projects\ZZZ\MyNn\GoogleQuickDraw\apple.npy";
+
+        
+
+
+
+
+        private const int len = 28;
+        private const int total = len * len; // 784
+        private const int prefix = 80;
+
         public Form1()
         {
             InitializeComponent();
-            InitializeNeuralNetworkNew();
-            InitializeNeuralNetworkOld();
-            SetCurrentNn();
 
-            Compare_Click(null, null);
+            //InitializeNeuralNetworkNew();
+            //InitializeNeuralNetworkOld();
+            //SetCurrentNn();
+
+            //Compare_Click(null, null);
             //TrainNn3();
             //ExcelTestTwoSixThreeTwo();
 
+            //Data = File.ReadAllBytes(filePath);
+
+
+            //pictureBox.Image = new Bitmap(pictureBox.Width, pictureBox.Height);
+
+            //this.pictureBox.SizeMode = PictureBoxSizeMode.Zoom;
+            //pictureBox.Size = new Size(112, 112);
+
+            FileWorker w = new FileWorker();
+            w.Initialize();
+            w.ReadAllFilesFromNpy();
+        }
+
+        byte[] Data;
+        int CurrentImgIndex = 0;
+
+        private void NextImage()
+        {
+            for (int i = 0; i < len; i++)
+            {
+                for (int j = 0; j < len; j++)
+                {
+                    Color color = Data[prefix + CurrentImgIndex * total + len * i + j] > 0 ? Color.Black : Color.White;
+
+                    ((Bitmap)pictureBox.Image).SetPixel(j, i, color);
+                }
+            }
+            CurrentImgIndex++;
+            pictureBox.Refresh();
         }
 
         private void SetCurrentNn()
@@ -263,5 +306,11 @@ namespace NeuralNetwork
             Train_Click(null, null);
             CheckAnswer();
         }
+
+        private void NextImage_Click(object sender, EventArgs e)
+        {
+            NextImage();
+        }
+
     }
 }
