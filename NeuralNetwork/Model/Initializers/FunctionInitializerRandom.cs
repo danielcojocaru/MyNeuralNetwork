@@ -21,13 +21,13 @@ namespace NeuralNetwork.Model.Initializers
             {
                 return ResultEnum.Simple;
             }
-            else if(index == 1)
+            else if (index == 1 || index  == 2)
             {
                 return ResultEnum.Sigmoid;
             }
             else
             {
-                return ResultEnum.Sigmoid;
+                return ResultEnum.Softmax;
             }
         }
     }

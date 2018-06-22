@@ -287,10 +287,15 @@ namespace NeuralNetwork.Model
         {
             if (printStep)
             {
-                Console.WriteLine("I : ");
-                Console.WriteLine(I);
-                Console.WriteLine("O : ");
-                Console.WriteLine(O);
+                if (Double.IsNaN(I[0, 0]) || Double.IsNaN(O[0, 0]))
+                {
+
+                }
+
+                //Console.WriteLine("I : ");
+                //Console.WriteLine(I);
+                //Console.WriteLine("O : ");
+                //Console.WriteLine(O);
             }
         }
 

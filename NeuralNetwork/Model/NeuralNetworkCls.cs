@@ -19,14 +19,15 @@ namespace NeuralNetwork.Model
         public INeuralNetworkInitializer NnInitializer { get; set; }
         public IFunctionInitializer FunctionInitializer { get; set; }
 
-        public bool PrintStep = false;
+        public bool PrintStep = true;
         public bool CompleteObjList = true;
         public List<object> NeuronsAndSynappses { get; set; } = new List<object>();
         public int Epochs { get; set; }
         public int MaxEpochs { get; set; } = 1;
         public List<Matrix<double>> Errors { get; set; } = new List<Matrix<double>>();
+        public Matrix<double> LastGeneralizedError { get; set; }
 
-        public double Lr { get; set; } = 0.1;
+        public double Lr { get; set; } = 0.01;
 
         public bool IsExcelTest { get; set; }
 
@@ -81,7 +82,7 @@ namespace NeuralNetwork.Model
         {
             //double toReturn = Math.Pow(received, 2) - Math.Pow(expected, 2);
             double toReturn = received - expected;
-            return toReturn;
+            return toReturn * 2;
         }
 
         private double SquareError(double expected, double received)
@@ -162,6 +163,7 @@ namespace NeuralNetwork.Model
         {
             Matrix<double> error = GetGeneralError(Errors);
             Errors = new List<Matrix<double>>();
+            LastGeneralizedError = error;
             LastNeurons.Backpropagation(error);
         }
 

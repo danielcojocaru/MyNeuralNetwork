@@ -9,7 +9,7 @@ namespace NeuralNetwork.Auxiliar.Interface
 {
     public interface INeuralNetwork
     {
-        void Forward(double[] input, double[] answer, bool doBackpropagation = true);
+        void Forward(double[] input, double[] targets, bool doBackpropagation = true);
         Matrix<double> Guess(double[] input);
         void Create(int[] layers);
         void Initialize();

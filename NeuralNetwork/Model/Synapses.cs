@@ -72,7 +72,10 @@ namespace NeuralNetwork.Model
                 {
                     for (int col = 0; col < matrix.ColumnCount; col++)
                     {
-                        matrix[row, col] = (double)random.NextDouble() * 2D - 1D;
+                        double ran = (double)random.NextDouble() * 2D - 1D;
+                        //double ran = (double)(random.NextDouble() + 0.5D) * 10D;
+
+                        matrix[row, col] = ran;
                     }
                 }
             }
@@ -88,10 +91,15 @@ namespace NeuralNetwork.Model
         {
             if (printStep)
             {
-                Console.WriteLine("W : ");
-                Console.WriteLine(W);
-                Console.WriteLine("B : ");
-                Console.WriteLine(B);
+                if (Double.IsNaN(W[0,0]) || Double.IsNaN(B[0, 0]))
+                {
+
+                }
+
+                //Console.WriteLine("W : ");
+                //Console.WriteLine(W);
+                //Console.WriteLine("B : ");
+                //Console.WriteLine(B);
             }
         }
 
@@ -108,8 +116,8 @@ namespace NeuralNetwork.Model
             //Console.WriteLine(dB);
             //Console.WriteLine(dW);
 
-            PrevNe.Backpropagation(NextNe.E);
-            //PrevNe.Backpropagation(eOnI);
+            //PrevNe.Backpropagation(NextNe.E);
+            PrevNe.Backpropagation(eOnI);
         }
 
         public void ApplyDeltas()

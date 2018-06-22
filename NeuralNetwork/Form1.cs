@@ -16,6 +16,7 @@ using NeuralNetwork.Auxiliar.Enum;
 using NeuralNetwork.Auxiliar.Interface;
 using System.IO;
 using NeuralNetwork.Worker;
+using NeuralNetwork.Auxiliar.Model;
 
 namespace NeuralNetwork
 {
@@ -28,13 +29,35 @@ namespace NeuralNetwork
 
 
 
-        private const int len = 28;
-        private const int total = len * len; // 784
-        private const int prefix = 80;
-
         public Form1()
         {
             InitializeComponent();
+
+
+
+            //FileWorker w = new FileWorker();
+            //w.Initialize();
+            //w.CreateBlackAndWhiteTxtFilesUsingNpy();
+
+
+
+
+
+            FileWorker w = new FileWorker();
+            w.Initialize();
+            List<List<byte[]>> data = w.ReadAllFilesFromNpy();
+
+            WrapperTrainer wrapper = new WrapperTrainer() { Data = data };
+
+            Trainer trainer = new Trainer();
+            trainer.Create(wrapper);
+            trainer.Initialize();
+            trainer.Process();
+
+
+
+
+
 
             //InitializeNeuralNetworkNew();
             //InitializeNeuralNetworkOld();
@@ -52,9 +75,7 @@ namespace NeuralNetwork
             //this.pictureBox.SizeMode = PictureBoxSizeMode.Zoom;
             //pictureBox.Size = new Size(112, 112);
 
-            FileWorker w = new FileWorker();
-            w.Initialize();
-            w.ReadAllFilesFromNpy();
+
         }
 
         byte[] Data;
@@ -62,11 +83,11 @@ namespace NeuralNetwork
 
         private void NextImage()
         {
-            for (int i = 0; i < len; i++)
+            for (int i = 0; i < FileWorker._len; i++)
             {
-                for (int j = 0; j < len; j++)
+                for (int j = 0; j < FileWorker._len; j++)
                 {
-                    Color color = Data[prefix + CurrentImgIndex * total + len * i + j] > 0 ? Color.Black : Color.White;
+                    Color color = Data[FileWorker._prefix + CurrentImgIndex * FileWorker._total + FileWorker._len * i + j] > 0 ? Color.Black : Color.White;
 
                     ((Bitmap)pictureBox.Image).SetPixel(j, i, color);
                 }

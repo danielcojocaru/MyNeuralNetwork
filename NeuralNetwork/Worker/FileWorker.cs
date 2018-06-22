@@ -12,7 +12,7 @@ namespace NeuralNetwork.Worker
     {
         public const int _len = 28;
         public const int _total = _len * _len; // 784
-        public const int _prefix = 80;
+        public const int _prefix = 84;  // 80
 
         public const int _dataLen = 1000;
 
@@ -22,13 +22,26 @@ namespace NeuralNetwork.Worker
 
         public List<string> Entities { get; set; } = new List<string>()
         {
-            "airplane",
-            "apple",
-            "banana",
-            "bed",
-            "bicycle",
-            "car",
-            "cat",
+            "data0",
+            "data1",
+            "data2",
+            "data3",
+            "data4",
+            "data5",
+            "data6",
+            "data7",
+            "data8",
+            "data9",
+
+
+
+            //"airplane",
+            //"apple",
+            //"banana",
+            //"bed",
+            //"bicycle",
+            //"car",
+            //"cat",
         };
 
         public int ObjCount { get; set; }
@@ -43,8 +56,8 @@ namespace NeuralNetwork.Worker
 
         public void Initialize()
         {
-            ObjCount = Entities.Count;
-            ReadAllFilesFromNpy();
+            //ObjCount = Entities.Count;
+            //ReadAllFilesFromNpy();
         }
         
         public void CreateBlackAndWhiteTxtFilesUsingNpy()
@@ -72,7 +85,7 @@ namespace NeuralNetwork.Worker
             );
         }
 
-        public void ReadAllFilesFromNpy()
+        public List<List<byte[]>> ReadAllFilesFromNpy()
         {
             //Parallel.ForEach(Entities, /*new ParallelOptions() { MaxDegreeOfParallelism = Environment.ProcessorCount },*/ (entity) =>
             foreach (string entity in Entities)
@@ -86,7 +99,9 @@ namespace NeuralNetwork.Worker
                 byte[] currentBytes = new byte[_total];
                 for (int i = _prefix; i < data.Length; i++)
                 {
-                    currentBytes[j] = data[i];
+                    currentBytes[j] = data[i] == (byte)0 ? data[i] : (byte)1;
+                    //currentBytes[j] = data[i];
+
                     if (++j == _total)
                     {
                         list.Add(currentBytes);
@@ -100,6 +115,7 @@ namespace NeuralNetwork.Worker
                     
                 }
             }
+            return Data;
             //);
         }
     }
