@@ -1,9 +1,15 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
-VisualStudioVersion = 15.0.27004.2008
+VisualStudioVersion = 15.0.26430.14
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NeuralNetwork", "NeuralNetwork\NeuralNetwork.csproj", "{62866EBE-3C08-4EEE-B7AA-4297614AF06C}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NeuralNetworkOld", "NeuralNetworkOld\NeuralNetworkOld.csproj", "{028B3DB3-80A6-44BD-96EE-CE3668288819}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Auxiliar", "Auxiliar\Auxiliar.csproj", "{5B05A11B-94E3-40AB-BB4C-4E9F3B956498}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NeuralNetworkNew", "NeuralNetworkNew\NeuralNetworkNew.csproj", "{657C0162-3CD6-438B-AEC2-EFE75D8F3011}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Gui", "Gui\Gui.csproj", "{9F6D9F7C-53DE-4A08-9594-AD00AE7C4A54}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -11,10 +17,22 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{62866EBE-3C08-4EEE-B7AA-4297614AF06C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{62866EBE-3C08-4EEE-B7AA-4297614AF06C}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{62866EBE-3C08-4EEE-B7AA-4297614AF06C}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{62866EBE-3C08-4EEE-B7AA-4297614AF06C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{028B3DB3-80A6-44BD-96EE-CE3668288819}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{028B3DB3-80A6-44BD-96EE-CE3668288819}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{028B3DB3-80A6-44BD-96EE-CE3668288819}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{028B3DB3-80A6-44BD-96EE-CE3668288819}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5B05A11B-94E3-40AB-BB4C-4E9F3B956498}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5B05A11B-94E3-40AB-BB4C-4E9F3B956498}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5B05A11B-94E3-40AB-BB4C-4E9F3B956498}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5B05A11B-94E3-40AB-BB4C-4E9F3B956498}.Release|Any CPU.Build.0 = Release|Any CPU
+		{657C0162-3CD6-438B-AEC2-EFE75D8F3011}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{657C0162-3CD6-438B-AEC2-EFE75D8F3011}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{657C0162-3CD6-438B-AEC2-EFE75D8F3011}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{657C0162-3CD6-438B-AEC2-EFE75D8F3011}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9F6D9F7C-53DE-4A08-9594-AD00AE7C4A54}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9F6D9F7C-53DE-4A08-9594-AD00AE7C4A54}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9F6D9F7C-53DE-4A08-9594-AD00AE7C4A54}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9F6D9F7C-53DE-4A08-9594-AD00AE7C4A54}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
