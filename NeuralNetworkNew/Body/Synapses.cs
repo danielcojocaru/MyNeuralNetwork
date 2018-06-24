@@ -112,8 +112,8 @@ namespace NeuralNetworkNew.Body
             //Console.WriteLine(dB);
             //Console.WriteLine(dW);
 
-            //PrevNe.Backpropagation(NextNe.E);
-            PrevNe.Backpropagation(eOnI);
+            PrevNe.Backpropagation(NextNe.E);
+            //PrevNe.Backpropagation(eOnI);
         }
 
         public void ApplyDeltas()
