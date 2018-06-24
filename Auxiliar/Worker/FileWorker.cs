@@ -66,23 +66,27 @@ namespace Auxiliar.Worker
             //foreach (string entity in Entities)
             {
                 byte[] data = File.ReadAllBytes(GetFilesPath(entity));
+                WriteToFile(data, entity);
+            }
+            );
+        }
 
-                string targetFile = Path.Combine(TxtDirectoryPath, entity + ".txt");
-                using (StreamWriter writer = new StreamWriter(targetFile))
+        public void WriteToFile(byte[] data, string entity)
+        {
+            string targetFile = Path.Combine(TxtDirectoryPath, entity + ".txt");
+            using (StreamWriter writer = new StreamWriter(targetFile))
+            {
+                int j = 0;
+                for (int i = Prefix; i < data.Length; i++)
                 {
-                    int j = 0;
-                    for (int i = Prefix; i < data.Length; i++)
+                    writer.Write(data[i] > 0 ? '1' : '0');
+                    if (++j == _len)
                     {
-                        writer.Write(data[i] > 0 ? '1' : '0');
-                        if (++j == _len)
-                        {
-                            writer.WriteLine();
-                            j = 0;
-                        }
+                        writer.WriteLine();
+                        j = 0;
                     }
                 }
             }
-            );
         }
 
         private string GetFilesPath(string entity)

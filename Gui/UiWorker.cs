@@ -14,6 +14,7 @@ namespace Gui
     public class UiWorker
     {
         public UiForm Form { get; set; }
+        public Trainer Trainer { get; set; }
 
         public UiWorker()
         {
@@ -22,26 +23,36 @@ namespace Gui
         public void Create(UiForm uiForm)
         {
             Form = uiForm;
-        }
 
-        public void Start()
-        {
             //FileWorker w = new FileWorker();
             //w.Initialize();
             //w.CreateBlackAndWhiteTxtFilesUsingNpy();
 
             FileWorker w = new FileWorker();
-            w.Create(new WrapperFileWorker() { Problem = ProblemEnum.QuickDraw});
+            w.Create(new WrapperFileWorker() { Problem = ProblemEnum.QuickDraw });
             w.Initialize();
             List<List<byte[]>> data = w.ReadAllFilesFromNpy();
 
             WrapperTrainer wrapper = new WrapperTrainer() { Data = data };
 
-            Trainer trainer = new Trainer();
-            trainer.Create(wrapper);
-            trainer.Initialize();
-            trainer.Process();
+            Trainer = new Trainer();
+            Trainer.Create(wrapper);
+            Trainer.Initialize();
         }
 
+        public void Train()
+        {
+            Task.Run(() => Trainer.Train());
+        }
+
+        public void StopTraining()
+        {
+            Trainer.StopTraining();
+        }
+
+        public int Guess(byte[] imgAsByte)
+        {
+            return Trainer.Guess(imgAsByte);
+        }
     }
 }

@@ -34,7 +34,7 @@ namespace NeuralNetworkNew.Worker
         {
             if (Nn == null)
             {
-                InitializeNnForGoogleQuickdraw();
+                InitializeNnFor24x24Drawings();
             }
             SetAnswer();
         }
@@ -50,7 +50,8 @@ namespace NeuralNetworkNew.Worker
             }
         }
 
-        private void InitializeNnForGoogleQuickdraw()
+
+        private void InitializeNnFor24x24Drawings()
         {
             NeuralNetworkCls nn = new NeuralNetworkCls();
             nn.FunctionInitializer = new FunctionInitializerRandom();
@@ -64,15 +65,24 @@ namespace NeuralNetworkNew.Worker
             Nn = nn;
         }
 
-        public object Process()
+        public bool IsStopTraining { get; set; } = false;
+
+        public void StopTraining()
         {
+            IsStopTraining = true;
+        }
+
+        public void Train()
+        {
+            IsStopTraining = false;
+
             Random r = new Random();
             int objCount = Data.Count;
             int imgCount = Data[0].Count;
 
             double max = 0;
 
-            while (true)
+            while (!IsStopTraining)
             {
                 Step++;
                 StepForPrecision++;
@@ -106,6 +116,26 @@ namespace NeuralNetworkNew.Worker
                     Correct = 0;
                 }
             }
+        }
+
+        public int Guess(byte[] imgAsByte)
+        {
+            double[] input = imgAsByte.Select(Convert.ToDouble).ToArray();
+            Nn.Forward(input, null, doBackpropagation: false);
+
+            int maxIndex = 0;
+            double max = -1;
+            for (int i = 0; i < Nn.LastNeurons.O.RowCount; i++)
+            {
+                double current = Nn.LastNeurons.O[i, 0];
+                if (max < current)
+                {
+                    max = current;
+                    maxIndex = i;
+                }
+            }
+
+            return maxIndex;
         }
 
         private int Correct = 0;
