@@ -9,15 +9,15 @@ using System.Threading.Tasks;
 
 namespace Auxiliar.Worker
 {
-    public class FileWorker
+    public class DataWorker
     {
         public const int _len = 28;
         public const int _total = _len * _len; // 784
-        public const int _dataLen = 1000;
+        public const int _dataLen = 800;
 
         public int Prefix;
 
-        List<List<byte[]>> Data = new List<List<byte[]>>();
+        //List<List<byte[]>> Data = new List<List<byte[]>>();
 
         public List<string> Entities { get; set; }
 
@@ -27,7 +27,7 @@ namespace Auxiliar.Worker
 
         public ProblemEnum? Problem { get; set; }
 
-        public FileWorker()
+        public DataWorker()
         {
         }
 
@@ -59,6 +59,8 @@ namespace Auxiliar.Worker
                     throw new NotImplementedException();
             }
         }
+
+        
 
         public void CreateBlackAndWhiteTxtFilesUsingNpy()
         {
@@ -94,21 +96,33 @@ namespace Auxiliar.Worker
             return Path.Combine(NpyDirectoryPath, FilesPath, entity + ".npy");
         }
 
-        public List<List<byte[]>> ReadAllFilesFromNpy()
+        public List<List<byte[]>> GetTestData()
         {
-            //Parallel.ForEach(Entities, /*new ParallelOptions() { MaxDegreeOfParallelism = Environment.ProcessorCount },*/ (entity) =>
+            // 1000 x 
+            int skipBytes = _dataLen * _total;
+            //int dataLen = _dataLen / 5;
+            int dataLen = 200;
+
+            List<List<byte[]>> testData = GetTrainData(skipBytes, dataLen);
+            return testData;
+        }
+
+        public List<List<byte[]>> GetTrainData(int skipBytes = 0, int dataLen = _dataLen)
+        {
+            List<List<byte[]>> data = new List<List<byte[]>>();
+
             foreach (string entity in Entities)
             {
-                byte[] data = File.ReadAllBytes(GetFilesPath(entity));
+                byte[] dataFromFile = File.ReadAllBytes(GetFilesPath(entity));
                 List<byte[]> list = new List<byte[]>();
-                Data.Add(list);
+                data.Add(list);
 
                 int obj = 0;
                 int j = 0;
                 byte[] currentBytes = new byte[_total];
-                for (int i = Prefix; i < data.Length; i++)
+                for (int i = Prefix + skipBytes; i < dataFromFile.Length; i++)
                 {
-                    currentBytes[j] = data[i] == (byte)0 ? data[i] : (byte)1;
+                    currentBytes[j] = dataFromFile[i] == 0 ? (byte)0 : (byte)1;
                     //currentBytes[j] = data[i];
 
                     if (++j == _total)
@@ -117,15 +131,12 @@ namespace Auxiliar.Worker
                         j = 0;
                         currentBytes = new byte[_total];
 
-                        if (++obj == _dataLen)
+                        if (++obj == dataLen)
                             break;
                     }
-
-
                 }
             }
-            return Data;
-            //);
+            return data;
         }
     }
 }

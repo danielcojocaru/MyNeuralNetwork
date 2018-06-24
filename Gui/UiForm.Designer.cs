@@ -34,6 +34,7 @@
             this.btnStopTraining = new System.Windows.Forms.Button();
             this.btnTrain = new System.Windows.Forms.Button();
             this.lblGuess = new System.Windows.Forms.Label();
+            this.btnTest = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox)).BeginInit();
             this.SuspendLayout();
             // 
@@ -100,11 +101,22 @@
             this.lblGuess.TabIndex = 6;
             this.lblGuess.Text = "[guess]";
             // 
+            // btnTest
+            // 
+            this.btnTest.Location = new System.Drawing.Point(567, 272);
+            this.btnTest.Name = "btnTest";
+            this.btnTest.Size = new System.Drawing.Size(116, 39);
+            this.btnTest.TabIndex = 7;
+            this.btnTest.Text = "Test";
+            this.btnTest.UseVisualStyleBackColor = true;
+            this.btnTest.Click += new System.EventHandler(this.btnTest_Click);
+            // 
             // UiForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(718, 391);
+            this.Controls.Add(this.btnTest);
             this.Controls.Add(this.lblGuess);
             this.Controls.Add(this.btnTrain);
             this.Controls.Add(this.btnStopTraining);
@@ -128,6 +140,7 @@
         private System.Windows.Forms.Button btnStopTraining;
         private System.Windows.Forms.Button btnTrain;
         private System.Windows.Forms.Label lblGuess;
+        private System.Windows.Forms.Button btnTest;
     }
 }
 

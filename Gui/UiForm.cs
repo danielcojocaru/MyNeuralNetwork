@@ -1,4 +1,5 @@
 ﻿using Auxiliar.Worker;
+using Auxiliar.Wrapper;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -31,7 +32,7 @@ namespace Gui
 
         private void InitializeFields()
         {
-            Len = FileWorker._len;
+            Len = DataWorker._len;
         }
 
         private void InitializeWorker()
@@ -48,7 +49,7 @@ namespace Gui
 
         private void InitializePaint()
         {
-            Pen = new Pen(Color.Black, 3);
+            Pen = new Pen(Color.Black, 4);
             Pen.StartCap = Pen.EndCap = System.Drawing.Drawing2D.LineCap.Round;
             ClearImage();
         }
@@ -65,11 +66,16 @@ namespace Gui
 
         private void btnGuess_Click(object sender, EventArgs e)
         {
+            Guess();
+        }
+
+        private void Guess()
+        {
             //Bitmap MyBitmap = ScaleImage(pictureBox.Image, 28, 28);
             //this.pictureBox.SizeMode = PictureBoxSizeMode.StretchImage;
             //pictureBox.Scale(new SizeF(0.1F, 0.1F));
             Bitmap MyBitmap = (Bitmap)pictureBox.Image;
-            
+
 
             byte[] imgAsByte = new byte[Len * Len];
             int index = -1;
@@ -92,7 +98,6 @@ namespace Gui
 
             int guessed = W.Guess(imgAsByte);
             lblGuess.Text = guessed.ToString();
-
         }
 
         static public Bitmap ScaleImage(Image image, int maxWidth, int maxHeight)
@@ -122,6 +127,8 @@ namespace Gui
             X = -1;
             Y = -1;
             //pictureBox.Cursor = Cursors.Default;
+
+            Guess();
         }
 
         private void pictureBox_MouseMove(object sender, MouseEventArgs e)
@@ -141,7 +148,7 @@ namespace Gui
                 X = e.X;
                 Y = e.Y;
 
-
+                Guess();
             }
         }
 
@@ -153,6 +160,11 @@ namespace Gui
         private void btnStopTraining_Click(object sender, EventArgs e)
         {
             W.StopTraining();
+        }
+
+        private void btnTest_Click(object sender, EventArgs e)
+        {
+            TestReport report = W.Test();
         }
     }
 }

@@ -8,6 +8,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Auxiliar.Wrapper;
 
 namespace NeuralNetworkNew.Worker
 {
@@ -57,13 +58,14 @@ namespace NeuralNetworkNew.Worker
             nn.FunctionInitializer = new FunctionInitializerRandom();
             //nnNew.NnInitializer = new NnInitializerXor();
 
-            int nrOfInputs = FileWorker._total;
+            int nrOfInputs = DataWorker._total;
 
             nn.Create(new int[] { nrOfInputs, 64, 64, Data.Count });
             nn.Initialize();
 
             Nn = nn;
         }
+
 
         public bool IsStopTraining { get; set; } = false;
 
@@ -72,11 +74,42 @@ namespace NeuralNetworkNew.Worker
             IsStopTraining = true;
         }
 
+
+        public TestReport Test(List<List<byte[]>> testData)
+        {
+            TestReport report = new TestReport();
+            report.SetNrOfEntities(testData.Count);
+
+            //foreach (List<byte[]> groupData in testData)
+            for (int i = 0; i < testData.Count; i++)
+            {
+                List<byte[]> groupData = testData[i];
+                double[] answer = Answer[i];
+
+                foreach (byte[] inputAsByte in groupData)
+                {
+                    double[] input = inputAsByte.Select(Convert.ToDouble).ToArray();
+                    Nn.Forward(input, answer, doBackpropagation: false);
+
+                    if (AnswerIsCorrect(answer))
+                    {
+                        report.AddCorrect(i);
+                    }
+                    else
+                    {
+                        report.AddIncorrect(i);
+                    }
+                }
+            }
+            return report;
+        }
+
         public void Train()
         {
             IsStopTraining = false;
+            Correct = 0;
 
-            Random r = new Random();
+            Random random = new Random();
             int objCount = Data.Count;
             int imgCount = Data[0].Count;
 
@@ -88,18 +121,15 @@ namespace NeuralNetworkNew.Worker
                 StepForPrecision++;
 
                 //int objIndex = 2;
-                int objIndex = r.Next(0, objCount); // 1 to 6
-                int imgIndex = r.Next(0, imgCount); // 1 to 1000
+                int objIndex = random.Next(0, objCount); // 1 to 6
+                int imgIndex = random.Next(0, imgCount); // 1 to 1000
 
                 double[] input = Data[objIndex][imgIndex].Select(Convert.ToDouble).ToArray();
                 double[] answer = Answer[objIndex];
 
                 Nn.Forward(input, answer, doBackpropagation: true);
 
-                double result = Nn.LastNeurons.O[objIndex, 0];
-                max = GetMax(Nn.LastNeurons.O);
-
-                if (max == result && max != 0)
+                if (AnswerIsCorrect(answer))
                 {
                     Correct++;
                 }
@@ -116,6 +146,34 @@ namespace NeuralNetworkNew.Worker
                     Correct = 0;
                 }
             }
+        }
+
+        private bool AnswerIsCorrect(double[] answer)
+        {
+            double maxAnswer = 0;
+            double maxOutput = 0;
+            int indexAnswer = 0;
+            int indexOutput = 0;
+
+            for (int i = 0; i < answer.Length; i++)
+            {
+                double currentAnswer = answer[i];
+                if (currentAnswer > maxAnswer)
+                {
+                    maxAnswer = currentAnswer;
+                    indexAnswer = i;
+                }
+
+                double currentOutput = Nn.LastNeurons.O[i, 0];
+                if (currentOutput > maxOutput)
+                {
+                    maxOutput = currentOutput;
+                    indexOutput = i;
+                }
+            }
+
+            bool isCorrect = indexAnswer == indexOutput && maxAnswer != 0 && maxOutput != 0;
+            return isCorrect;
         }
 
         public int Guess(byte[] imgAsByte)

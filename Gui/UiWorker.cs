@@ -15,6 +15,7 @@ namespace Gui
     {
         public UiForm Form { get; set; }
         public Trainer Trainer { get; set; }
+        public DataWorker DataWorker { get; set; }
 
         public UiWorker()
         {
@@ -24,20 +25,21 @@ namespace Gui
         {
             Form = uiForm;
 
-            //FileWorker w = new FileWorker();
-            //w.Initialize();
-            //w.CreateBlackAndWhiteTxtFilesUsingNpy();
-
-            FileWorker w = new FileWorker();
-            w.Create(new WrapperFileWorker() { Problem = ProblemEnum.QuickDraw });
-            w.Initialize();
-            List<List<byte[]>> data = w.ReadAllFilesFromNpy();
+            DataWorker = new DataWorker();
+            DataWorker.Create(new WrapperFileWorker() { Problem = ProblemEnum.Digits });
+            DataWorker.Initialize();
+            List<List<byte[]>> data = DataWorker.GetTrainData();
 
             WrapperTrainer wrapper = new WrapperTrainer() { Data = data };
 
             Trainer = new Trainer();
             Trainer.Create(wrapper);
             Trainer.Initialize();
+        }
+
+        public void CreateBlackAndWhiteTxtFilesUsingNpy()
+        {
+            DataWorker.CreateBlackAndWhiteTxtFilesUsingNpy();
         }
 
         public void Train()
@@ -53,6 +55,12 @@ namespace Gui
         public int Guess(byte[] imgAsByte)
         {
             return Trainer.Guess(imgAsByte);
+        }
+
+        public TestReport Test()
+        {
+            List<List<byte[]>> testData = DataWorker.GetTestData();
+            return Trainer.Test(testData);
         }
     }
 }
