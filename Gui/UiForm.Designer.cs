@@ -35,6 +35,9 @@
             this.btnTrain = new System.Windows.Forms.Button();
             this.lblGuess = new System.Windows.Forms.Label();
             this.btnTest = new System.Windows.Forms.Button();
+            this.btnShow = new System.Windows.Forms.Button();
+            this.txtbObjIndex = new System.Windows.Forms.TextBox();
+            this.btnToTxtFile = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox)).BeginInit();
             this.SuspendLayout();
             // 
@@ -111,11 +114,41 @@
             this.btnTest.UseVisualStyleBackColor = true;
             this.btnTest.Click += new System.EventHandler(this.btnTest_Click);
             // 
+            // btnShow
+            // 
+            this.btnShow.Location = new System.Drawing.Point(445, 227);
+            this.btnShow.Name = "btnShow";
+            this.btnShow.Size = new System.Drawing.Size(116, 39);
+            this.btnShow.TabIndex = 8;
+            this.btnShow.Text = "Show";
+            this.btnShow.UseVisualStyleBackColor = true;
+            this.btnShow.Click += new System.EventHandler(this.btnShow_Click);
+            // 
+            // txtbObjIndex
+            // 
+            this.txtbObjIndex.Location = new System.Drawing.Point(445, 201);
+            this.txtbObjIndex.Name = "txtbObjIndex";
+            this.txtbObjIndex.Size = new System.Drawing.Size(116, 20);
+            this.txtbObjIndex.TabIndex = 9;
+            // 
+            // btnToTxtFile
+            // 
+            this.btnToTxtFile.Location = new System.Drawing.Point(567, 227);
+            this.btnToTxtFile.Name = "btnToTxtFile";
+            this.btnToTxtFile.Size = new System.Drawing.Size(116, 39);
+            this.btnToTxtFile.TabIndex = 10;
+            this.btnToTxtFile.Text = "To txt file";
+            this.btnToTxtFile.UseVisualStyleBackColor = true;
+            this.btnToTxtFile.Click += new System.EventHandler(this.btnToTxtFile_Click);
+            // 
             // UiForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(718, 391);
+            this.Controls.Add(this.btnToTxtFile);
+            this.Controls.Add(this.txtbObjIndex);
+            this.Controls.Add(this.btnShow);
             this.Controls.Add(this.btnTest);
             this.Controls.Add(this.lblGuess);
             this.Controls.Add(this.btnTrain);
@@ -141,6 +174,9 @@
         private System.Windows.Forms.Button btnTrain;
         private System.Windows.Forms.Label lblGuess;
         private System.Windows.Forms.Button btnTest;
+        private System.Windows.Forms.Button btnShow;
+        private System.Windows.Forms.TextBox txtbObjIndex;
+        private System.Windows.Forms.Button btnToTxtFile;
     }
 }
 

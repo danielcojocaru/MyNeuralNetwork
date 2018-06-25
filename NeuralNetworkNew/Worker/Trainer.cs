@@ -16,6 +16,7 @@ namespace NeuralNetworkNew.Worker
     {
         public NeuralNetworkCls Nn { get; set; }
         public List<List<byte[]>> Data { get; set; }
+        public List<List<byte[]>> TestData { get; set; }
         public Dictionary<int, double[]> Answer { get; set; } = new Dictionary<int, double[]>();
 
         public int StepsToCalculatePrecision { get; set; } = 1000;
@@ -29,6 +30,7 @@ namespace NeuralNetworkNew.Worker
         {
             this.Nn = wrapper.Nn;
             this.Data = wrapper.Data;
+            this.TestData = wrapper.TestData;
         }
 
         public void Initialize()

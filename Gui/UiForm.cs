@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
+using System.Diagnostics;
 using System.Drawing;
 using System.Linq;
 using System.Text;
@@ -49,7 +50,7 @@ namespace Gui
 
         private void InitializePaint()
         {
-            Pen = new Pen(Color.Black, 4);
+            Pen = new Pen(Color.Black, 3);
             Pen.StartCap = Pen.EndCap = System.Drawing.Drawing2D.LineCap.Round;
             ClearImage();
         }
@@ -71,11 +72,21 @@ namespace Gui
 
         private void Guess()
         {
+            byte[] imgAsByte = GetImgFromPictureBox();
+
+            //DataWorker w = new DataWorker();
+            //w.WriteToFile(imgAsByte, "testImg");
+
+            int guessed = W.Guess(imgAsByte);
+            lblGuess.Text = guessed.ToString();
+        }
+
+        private byte[] GetImgFromPictureBox()
+        {
             //Bitmap MyBitmap = ScaleImage(pictureBox.Image, 28, 28);
             //this.pictureBox.SizeMode = PictureBoxSizeMode.StretchImage;
             //pictureBox.Scale(new SizeF(0.1F, 0.1F));
             Bitmap MyBitmap = (Bitmap)pictureBox.Image;
-
 
             byte[] imgAsByte = new byte[Len * Len];
             int index = -1;
@@ -86,18 +97,15 @@ namespace Gui
                     index++;
                     Color color = MyBitmap.GetPixel(j, i);
 
-                    if (!color.Name.Equals("0"))
+                    bool isWhite = color.Name.Equals("0") || color.Name.Equals("ffffffff");
+                    if (!isWhite)
                     {
                         imgAsByte[index] = 1;
                     }
                 }
             }
 
-            //FileWorker w = new FileWorker();
-            //w.WriteToFile(imgAsByte, "testImg");
-
-            int guessed = W.Guess(imgAsByte);
-            lblGuess.Text = guessed.ToString();
+            return imgAsByte;
         }
 
         static public Bitmap ScaleImage(Image image, int maxWidth, int maxHeight)
@@ -165,6 +173,54 @@ namespace Gui
         private void btnTest_Click(object sender, EventArgs e)
         {
             TestReport report = W.Test();
+        }
+
+        private void btnShow_Click(object sender, EventArgs e)
+        {
+            bool isNumber = int.TryParse(txtbObjIndex.Text, out int index);
+            if (isNumber)
+            {
+                byte[] img = W.GetRandomImage(index);
+                ApplyByteImg(img);
+            }
+            else
+            {
+                MessageBox.Show("In the txtObjIndex is not a number!");
+            }
+        }
+
+        private void ApplyByteImg(byte[] img)
+        {
+            Bitmap bitmap = (Bitmap)pictureBox.Image;
+
+
+            for (int i = 0; i < pictureBox.Image.Size.Height; i++)
+            {
+                for (int j = 0; j < pictureBox.Image.Size.Width; j++)
+                {
+                    Color color = img[i * pictureBox.Image.Size.Width + j] == 0 ? Color.White : Color.Black;
+                    bitmap.SetPixel(j, i, color);
+                }
+            }
+            pictureBox.Image = bitmap;
+        }
+
+        private void btnToTxtFile_Click(object sender, EventArgs e)
+        {
+            byte[] imgAsByte = GetImgFromPictureBox();
+
+            DataWorker w = new DataWorker();
+            w.WriteToFile(imgAsByte, "testImg");
+
+            try
+            {
+                Process myProcess = new Process();
+                Process.Start("notepad++.exe", @"C:\Useful\NN\txt\testImg.txt");
+            }
+            catch (Exception)
+            {
+                MessageBox.Show("Could not open file");
+            }
         }
     }
 }

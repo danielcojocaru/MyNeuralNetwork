@@ -11,5 +11,6 @@ namespace NeuralNetworkNew.Wrapper
     {
         public NeuralNetworkCls Nn { get; set; }
         public List<List<byte[]>> Data { get; set; }
+        public List<List<byte[]>> TestData { get; set; }
     }
 }

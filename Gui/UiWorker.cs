@@ -29,8 +29,9 @@ namespace Gui
             DataWorker.Create(new WrapperFileWorker() { Problem = ProblemEnum.Digits });
             DataWorker.Initialize();
             List<List<byte[]>> data = DataWorker.GetTrainData();
+            List<List<byte[]>> testData = DataWorker.GetTestData();
 
-            WrapperTrainer wrapper = new WrapperTrainer() { Data = data };
+            WrapperTrainer wrapper = new WrapperTrainer() { Data = data, TestData = testData };
 
             Trainer = new Trainer();
             Trainer.Create(wrapper);
@@ -61,6 +62,22 @@ namespace Gui
         {
             List<List<byte[]>> testData = DataWorker.GetTestData();
             return Trainer.Test(testData);
+        }
+
+        public byte[] GetRandomImage(int index)
+        {
+            try
+            {
+                byte[] img = Trainer.TestData[index][new Random().Next(0, Trainer.TestData[0].Count)];
+                return img;
+            }
+            catch (Exception)
+            {
+                System.Windows.Forms.MessageBox.Show("OutOfRange");
+
+                return Trainer.Data[0][0];
+            }
+            
         }
     }
 }

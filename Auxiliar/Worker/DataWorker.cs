@@ -13,11 +13,9 @@ namespace Auxiliar.Worker
     {
         public const int _len = 28;
         public const int _total = _len * _len; // 784
-        public const int _dataLen = 800;
+        public const int _dataLen = 1000;
 
         public int Prefix;
-
-        //List<List<byte[]>> Data = new List<List<byte[]>>();
 
         public List<string> Entities { get; set; }
 
@@ -60,8 +58,6 @@ namespace Auxiliar.Worker
             }
         }
 
-        
-
         public void CreateBlackAndWhiteTxtFilesUsingNpy()
         {
             Parallel.ForEach(Entities, /*new ParallelOptions() { MaxDegreeOfParallelism = Environment.ProcessorCount},*/ (entity) =>
@@ -91,9 +87,9 @@ namespace Auxiliar.Worker
             }
         }
 
-        private string GetFilesPath(string entity)
+        private string GetFilesPath(string fileName)
         {
-            return Path.Combine(NpyDirectoryPath, FilesPath, entity + ".npy");
+            return Path.Combine(NpyDirectoryPath, FilesPath, fileName + ".npy");
         }
 
         public List<List<byte[]>> GetTestData()
@@ -103,7 +99,8 @@ namespace Auxiliar.Worker
             //int dataLen = _dataLen / 5;
             int dataLen = 200;
 
-            List<List<byte[]>> testData = GetTrainData(skipBytes, dataLen);
+            List<List<byte[]>> testData = GetTrainData(skipBytes, dataLen); 
+
             return testData;
         }
 
@@ -111,9 +108,9 @@ namespace Auxiliar.Worker
         {
             List<List<byte[]>> data = new List<List<byte[]>>();
 
-            foreach (string entity in Entities)
+            foreach (string fileName in Entities)
             {
-                byte[] dataFromFile = File.ReadAllBytes(GetFilesPath(entity));
+                byte[] dataFromFile = File.ReadAllBytes(GetFilesPath(fileName));
                 List<byte[]> list = new List<byte[]>();
                 data.Add(list);
 
@@ -138,5 +135,41 @@ namespace Auxiliar.Worker
             }
             return data;
         }
+
+        //private List<List<byte[]>> GetTrainDataForDigits_2()
+        //{
+        //    List<List<byte[]>> data = new List<List<byte[]>>();
+        //    byte[] dataFromFile = File.ReadAllBytes(GetFilesPath("digits_2_train"));
+
+        //    //WriteToFile(dataFromFile, "All");
+
+        //    for (int k = 0; k < 10; k++)
+        //    {
+        //        int skipBytes = 6000 * k;
+
+        //        List<byte[]> list = new List<byte[]>();
+        //        data.Add(list);
+
+        //        int j = 0;
+        //        byte[] currentBytes = new byte[_total];
+        //        for (int i = Prefix + skipBytes; i < Prefix + skipBytes + 6000 * _total; i++)
+        //        {
+        //            currentBytes[j] = dataFromFile[i] == 0 ? (byte)0 : (byte)1;
+        //            //currentBytes[j] = data[i];
+
+        //            if (++j == _total)
+        //            {
+        //                list.Add(currentBytes);
+        //                j = 0;
+        //                currentBytes = new byte[_total];
+        //            }
+        //        }
+        //    }
+
+        //    //WriteToFile(data[0][0], "0");
+        //    //WriteToFile(data[0][data[0].Count - 1], "0Final");
+
+        //    return data;
+        //}
     }
 }
