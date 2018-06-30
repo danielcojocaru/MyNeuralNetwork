@@ -6,6 +6,8 @@ using System.ComponentModel;
 using System.Data;
 using System.Diagnostics;
 using System.Drawing;
+using System.Drawing.Drawing2D;
+using System.Drawing.Imaging;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -43,21 +45,22 @@ namespace Gui
             //W.Train();
         }
 
-        private Pen Pen;
+        private Pen PenSmall;
         private bool Moving;
         private int X;
         private int Y;
 
         private void InitializePaint()
         {
-            Pen = new Pen(Color.Black, 3);
-            Pen.StartCap = Pen.EndCap = System.Drawing.Drawing2D.LineCap.Round;
+            PenSmall = new Pen(Color.Black, 10);
+            PenSmall.StartCap = PenSmall.EndCap = System.Drawing.Drawing2D.LineCap.Round;
             ClearImage();
         }
 
         private void ClearImage()
         {
             pictureBox.Image = new Bitmap(pictureBox.Width, pictureBox.Height, pictureBox.CreateGraphics());
+            pictureBoxBig.Image = new Bitmap(pictureBoxBig.Width, pictureBoxBig.Height, pictureBoxBig.CreateGraphics());
         }
 
         private void btnClear_Click(object sender, EventArgs e)
@@ -86,7 +89,11 @@ namespace Gui
             //Bitmap MyBitmap = ScaleImage(pictureBox.Image, 28, 28);
             //this.pictureBox.SizeMode = PictureBoxSizeMode.StretchImage;
             //pictureBox.Scale(new SizeF(0.1F, 0.1F));
-            Bitmap MyBitmap = (Bitmap)pictureBox.Image;
+            Bitmap myBitmap = (Bitmap)pictureBox.Image;
+
+            int h = myBitmap.Height;
+            int w = myBitmap.Width;
+
 
             byte[] imgAsByte = new byte[Len * Len];
             int index = -1;
@@ -95,7 +102,7 @@ namespace Gui
                 for (int j = 0; j < Len; j++)
                 {
                     index++;
-                    Color color = MyBitmap.GetPixel(j, i);
+                    Color color = myBitmap.GetPixel(j, i);
 
                     bool isWhite = color.Name.Equals("0") || color.Name.Equals("ffffffff");
                     if (!isWhite)
@@ -107,26 +114,12 @@ namespace Gui
 
             return imgAsByte;
         }
-
-        static public Bitmap ScaleImage(Image image, int maxWidth, int maxHeight)
-        {
-            var ratioX = (double)maxWidth / image.Width;
-            var ratioY = (double)maxHeight / image.Height;
-            var ratio = Math.Min(ratioX, ratioY);
-            var newWidth = (int)(image.Width * ratio);
-            var newHeight = (int)(image.Height * ratio);
-            var newImage = new Bitmap(newWidth, newHeight);
-            Graphics.FromImage(newImage).DrawImage(image, 0, 0, newWidth, newHeight);
-            Bitmap bmp = new Bitmap(newImage);
-            return bmp;
-        }
-
         private void pictureBox_MouseDown(object sender, MouseEventArgs e)
         {
             Moving = true;
             X = e.X;
             Y = e.Y;
-            //pictureBox.Cursor = Cursors.Cross;
+            //pictureBoxBig.Cursor = Cursors.Arrow;
         }
 
         private void pictureBox_MouseUp(object sender, MouseEventArgs e)
@@ -134,9 +127,9 @@ namespace Gui
             Moving = false;
             X = -1;
             Y = -1;
-            //pictureBox.Cursor = Cursors.Default;
+            //pictureBoxBig.Cursor = Cursors.Default;
 
-            Guess();
+            //Guess();
         }
 
         private void pictureBox_MouseMove(object sender, MouseEventArgs e)
@@ -147,17 +140,43 @@ namespace Gui
                 //X = e.X;
                 //Y = e.Y;
 
-                Image image = pictureBox.Image;
+                Image image = pictureBoxBig.Image;
                 using (Graphics g = Graphics.FromImage(image))
                 {
-                    g.DrawLine(Pen, new Point(X, Y), e.Location);
+                    g.DrawLine(PenSmall, new Point(X, Y), e.Location);
                 }
-                pictureBox.Image = image;
+                pictureBoxBig.Image = image;
+                pictureBox.Image = ResizeImage(image, pictureBox.Width, pictureBox.Height);
                 X = e.X;
                 Y = e.Y;
 
                 Guess();
             }
+        }
+
+        public static Bitmap ResizeImage(Image image, int width, int height)
+        {
+            var destRect = new Rectangle(0, 0, width, height);
+            var destImage = new Bitmap(width, height);
+
+            destImage.SetResolution(image.HorizontalResolution, image.VerticalResolution);
+
+            using (var graphics = Graphics.FromImage(destImage))
+            {
+                graphics.CompositingMode = CompositingMode.SourceCopy;
+                graphics.CompositingQuality = CompositingQuality.HighQuality;
+                graphics.InterpolationMode = InterpolationMode.HighQualityBicubic;
+                graphics.SmoothingMode = SmoothingMode.HighQuality;
+                graphics.PixelOffsetMode = PixelOffsetMode.HighQuality;
+
+                using (var wrapMode = new ImageAttributes())
+                {
+                    wrapMode.SetWrapMode(WrapMode.TileFlipXY);
+                    graphics.DrawImage(image, destRect, 0, 0, image.Width, image.Height, GraphicsUnit.Pixel, wrapMode);
+                }
+            }
+
+            return destImage;
         }
 
         private void btnTrain_Click(object sender, EventArgs e)

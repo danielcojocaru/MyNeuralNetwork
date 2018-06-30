@@ -38,7 +38,9 @@
             this.btnShow = new System.Windows.Forms.Button();
             this.txtbObjIndex = new System.Windows.Forms.TextBox();
             this.btnToTxtFile = new System.Windows.Forms.Button();
+            this.pictureBoxBig = new System.Windows.Forms.PictureBox();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBoxBig)).BeginInit();
             this.SuspendLayout();
             // 
             // btnGuess
@@ -141,11 +143,25 @@
             this.btnToTxtFile.UseVisualStyleBackColor = true;
             this.btnToTxtFile.Click += new System.EventHandler(this.btnToTxtFile_Click);
             // 
+            // pictureBoxBig
+            // 
+            this.pictureBoxBig.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.pictureBoxBig.Location = new System.Drawing.Point(77, 12);
+            this.pictureBoxBig.Name = "pictureBoxBig";
+            this.pictureBoxBig.Size = new System.Drawing.Size(140, 140);
+            this.pictureBoxBig.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
+            this.pictureBoxBig.TabIndex = 11;
+            this.pictureBoxBig.TabStop = false;
+            this.pictureBoxBig.MouseDown += new System.Windows.Forms.MouseEventHandler(this.pictureBox_MouseDown);
+            this.pictureBoxBig.MouseMove += new System.Windows.Forms.MouseEventHandler(this.pictureBox_MouseMove);
+            this.pictureBoxBig.MouseUp += new System.Windows.Forms.MouseEventHandler(this.pictureBox_MouseUp);
+            // 
             // UiForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(718, 391);
+            this.Controls.Add(this.pictureBoxBig);
             this.Controls.Add(this.btnToTxtFile);
             this.Controls.Add(this.txtbObjIndex);
             this.Controls.Add(this.btnShow);
@@ -161,6 +177,7 @@
             this.Text = "Form1";
             this.Load += new System.EventHandler(this.UiForm_Load);
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBoxBig)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -177,6 +194,7 @@
         private System.Windows.Forms.Button btnShow;
         private System.Windows.Forms.TextBox txtbObjIndex;
         private System.Windows.Forms.Button btnToTxtFile;
+        private System.Windows.Forms.PictureBox pictureBoxBig;
     }
 }
 
