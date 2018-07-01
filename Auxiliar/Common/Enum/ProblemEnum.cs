@@ -10,6 +10,7 @@ namespace Auxiliar.Common.Enum
     {
         Xor,
         Digits,
+        OwnDigits,
         QuickDraw
     }
 }

@@ -21,7 +21,9 @@ namespace Auxiliar.Worker
 
         public string NpyDirectoryPath { get; set; } = @"C:\Useful\NN\npy";
         public string TxtDirectoryPath { get; set; } = @"C:\Useful\NN\txt";
+        public string CreatedDirectoryPath { get; set; } = @"C:\Useful\NN\Created";
         public string FilesPath { get; set; }
+
 
         public ProblemEnum? Problem { get; set; }
 
@@ -48,6 +50,11 @@ namespace Auxiliar.Worker
                     Entities = Enum.GetNames(typeof(DigitsEnum)).ToList();
                     FilesPath = "Digits";
                     break;
+                case ProblemEnum.OwnDigits:
+                    Prefix = 0;
+                    Entities = Enum.GetNames(typeof(DigitsEnum)).ToList();
+                    FilesPath = "OwnDigits";
+                    break;
                 case ProblemEnum.QuickDraw:
                     Prefix = 80;
                     Entities = Enum.GetNames(typeof(QuickDrawEnum)).ToList();
@@ -64,12 +71,41 @@ namespace Auxiliar.Worker
             //foreach (string entity in Entities)
             {
                 byte[] data = File.ReadAllBytes(GetFilesPath(entity));
-                WriteToFile(data, entity);
+                WriteToTxtFile(data, entity);
             }
             );
         }
 
-        public void WriteToFile(byte[] data, string entity)
+        public void DoCustomStuff()
+        {
+            //byte[] data1 = File.ReadAllBytes(@"C:\Useful\NN\Created\Data6.npy");
+            //byte[] data2 = File.ReadAllBytes(@"C:\Useful\NN\Created\Data5.npy");
+
+            //int len1 = data1.Length;
+            //int len2 = data2.Length;
+
+            //byte[] the8 = new byte[len2];
+            //byte[] the9 = new byte[len2];
+
+
+            //for (int i = 0; i < len2; i++)
+            //{
+            //    the8[i] = data1[i];
+            //}
+
+            //int index = -1;
+            //for (int i = 78400; i < data1.Length; i++)
+            //{
+            //    index++;
+            //    the9[index] = data1[i];
+            //}
+
+            //WriteToNpyFile(the8, 8);
+            //WriteToNpyFile(the9, 9);
+
+        }
+
+        public void WriteToTxtFile(byte[] data, string entity)
         {
             string targetFile = Path.Combine(TxtDirectoryPath, entity + ".txt");
             using (StreamWriter writer = new StreamWriter(targetFile))
@@ -83,6 +119,41 @@ namespace Auxiliar.Worker
                         writer.WriteLine();
                         j = 0;
                     }
+                }
+            }
+        }
+
+        public void WriteToNpyFile(byte[] data, int entityIndex)
+        {
+            WriteToNpyFile(data, Entities[entityIndex]);
+        }
+
+        public void WriteToNpyFile(List<byte[]> data, int entityIndex)
+        {
+            WriteToNpyFile(data, Entities[entityIndex]);
+        }
+
+        public void WriteToNpyFile(byte[] data, string entity)
+        {
+            string targetFile = Path.Combine(CreatedDirectoryPath, entity + ".npy");
+
+            using (var fs = new FileStream(targetFile, FileMode, FileAccess.Write))
+            {
+                fs.Write(data, 0, data.Length);
+            }
+        }
+
+        private FileMode FileMode = FileMode.Append;
+
+        public void WriteToNpyFile(List<byte[]> dataList, string entity)
+        {
+            string targetFile = Path.Combine(CreatedDirectoryPath, entity + ".npy");
+
+            using (var fs = new FileStream(targetFile, FileMode, FileAccess.Write))
+            {
+                foreach (byte[] data in dataList)
+                {
+                    fs.Write(data, 0, data.Length);
                 }
             }
         }

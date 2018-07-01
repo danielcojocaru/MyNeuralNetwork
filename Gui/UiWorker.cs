@@ -5,9 +5,11 @@ using NeuralNetworkNew.Worker;
 using NeuralNetworkNew.Wrapper;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Forms;
 
 namespace Gui
 {
@@ -16,6 +18,8 @@ namespace Gui
         public UiForm Form { get; set; }
         public Trainer Trainer { get; set; }
         public DataWorker DataWorker { get; set; }
+
+        public Dictionary<int, List<byte[]>> CreatedData { get; set; } = new Dictionary<int, List<byte[]>>();
 
         public UiWorker()
         {
@@ -26,7 +30,7 @@ namespace Gui
             Form = uiForm;
 
             DataWorker = new DataWorker();
-            DataWorker.Create(new WrapperFileWorker() { Problem = ProblemEnum.Digits });
+            DataWorker.Create(new WrapperFileWorker() { Problem = ProblemEnum.OwnDigits });
             DataWorker.Initialize();
             List<List<byte[]>> data = DataWorker.GetTrainData();
             List<List<byte[]>> testData = DataWorker.GetTestData();
@@ -68,16 +72,119 @@ namespace Gui
         {
             try
             {
-                byte[] img = Trainer.TestData[index][new Random().Next(0, Trainer.TestData[0].Count)];
+                byte[] img = GetRandom(Trainer.TestData, index);
                 return img;
             }
             catch (Exception)
             {
-                System.Windows.Forms.MessageBox.Show("OutOfRange");
-
-                return Trainer.Data[0][0];
+                try
+                {
+                    byte[] img = GetRandom(Trainer.Data, index);
+                    //MessageBox.Show("No test data found.");
+                    return img;
+                }
+                catch (Exception)
+                {
+                    MessageBox.Show("OutOfRange");
+                    return Trainer.Data[0][0];
+                }
             }
-            
+        }
+
+        private byte[] GetRandom(List<List<byte[]>> data, int index)
+        {
+            return data[index][new Random().Next(0, data[0].Count)];
+        }
+
+        public void ImgToNpyFile(string fileName = "testImg")
+        {
+            byte[] imgAsByte = Form.GetImgFromPictureBox();
+
+            DataWorker w = new DataWorker();
+            w.WriteToNpyFile(imgAsByte, "testImg");
+            string filePath = string.Format(@"C:\Useful\NN\Created\{0}.npy", fileName);
+
+            try
+            {
+                Process myProcess = new Process();
+                Process.Start("notepad++.exe", filePath);
+            }
+            catch (Exception)
+            {
+                MessageBox.Show(Form, "Could not open file");
+            }
+        }
+
+        public void ImgToTxtFile(string fileName = "testImg")
+        {
+            byte[] imgAsByte = Form.GetImgFromPictureBox();
+
+            DataWorker w = new DataWorker();
+            w.WriteToTxtFile(imgAsByte, "testImg");
+            string filePath = string.Format(@"C:\Useful\NN\Created\{0}.npy", fileName);
+
+            try
+            {
+                Process myProcess = new Process();
+                Process.Start("notepad++.exe", filePath);
+            }
+            catch (Exception)
+            {
+                MessageBox.Show(Form, "Could not open file");
+            }
+        }
+
+        public int SaveCurrentImgToData(int index)
+        {
+            List<byte[]> dataList;
+            if (!CreatedData.ContainsKey(index))
+            {
+                dataList = new List<byte[]>();
+                CreatedData.Add(index, dataList);
+            }
+            else
+            {
+                dataList = CreatedData[index];
+            }
+
+            byte[] imgAsByte = Form.GetImgFromPictureBox();
+            dataList.Add(imgAsByte);
+            return dataList.Count;
+        }
+
+        public void SaveCreatedDataToNpy()
+        {
+            foreach (KeyValuePair<int, List<byte[]>> entry in CreatedData)
+            {
+                DataWorker.WriteToNpyFile(entry.Value, entry.Key);
+            }
+
+            CreatedData = new Dictionary<int, List<byte[]>>();
+        }
+
+        public void RemoveLastInserted(int index)
+        {
+            if (CreatedData.ContainsKey(index))
+            {
+                List<byte[]> list = CreatedData[index];
+                if (list.Count > 0)
+                {
+                    list.RemoveAt(list.Count - 1);
+                }
+                else
+                {
+                    MessageBox.Show(Form, "There is no data for that key. Count = 0.");
+                }
+            }
+            else
+            {
+                MessageBox.Show(Form, "There is no data for that key");
+            }
+        }
+
+        public void DoCustomStuff()
+        {
+            DataWorker.DoCustomStuff();
         }
     }
 }

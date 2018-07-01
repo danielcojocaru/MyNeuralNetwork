@@ -1,4 +1,5 @@
-﻿using Auxiliar.Worker;
+﻿using Auxiliar.Other;
+using Auxiliar.Worker;
 using Auxiliar.Wrapper;
 using System;
 using System.Collections.Generic;
@@ -84,15 +85,15 @@ namespace Gui
             lblGuess.Text = guessed.ToString();
         }
 
-        private byte[] GetImgFromPictureBox()
+        public byte[] GetImgFromPictureBox()
         {
             //Bitmap MyBitmap = ScaleImage(pictureBox.Image, 28, 28);
             //this.pictureBox.SizeMode = PictureBoxSizeMode.StretchImage;
             //pictureBox.Scale(new SizeF(0.1F, 0.1F));
             Bitmap myBitmap = (Bitmap)pictureBox.Image;
 
-            int h = myBitmap.Height;
-            int w = myBitmap.Width;
+            //int h = myBitmap.Height;
+            //int w = myBitmap.Width;
 
 
             byte[] imgAsByte = new byte[Len * Len];
@@ -104,8 +105,7 @@ namespace Gui
                     index++;
                     Color color = myBitmap.GetPixel(j, i);
 
-                    bool isWhite = color.Name.Equals("0") || color.Name.Equals("ffffffff");
-                    if (!isWhite)
+                    if (!color.IsWhite())
                     {
                         imgAsByte[index] = 1;
                     }
@@ -114,6 +114,9 @@ namespace Gui
 
             return imgAsByte;
         }
+
+        
+
         private void pictureBox_MouseDown(object sender, MouseEventArgs e)
         {
             Moving = true;
@@ -147,6 +150,7 @@ namespace Gui
                 }
                 pictureBoxBig.Image = image;
                 pictureBox.Image = ResizeImage(image, pictureBox.Width, pictureBox.Height);
+                MakeGrayPixelsBlack();
                 X = e.X;
                 Y = e.Y;
 
@@ -212,7 +216,6 @@ namespace Gui
         {
             Bitmap bitmap = (Bitmap)pictureBox.Image;
 
-
             for (int i = 0; i < pictureBox.Image.Size.Height; i++)
             {
                 for (int j = 0; j < pictureBox.Image.Size.Width; j++)
@@ -224,22 +227,58 @@ namespace Gui
             pictureBox.Image = bitmap;
         }
 
-        private void btnToTxtFile_Click(object sender, EventArgs e)
+        private void btnToTxtFile_Click(object sender, EventArgs e) => W.ImgToTxtFile();
+
+        private void MakeGrayPixelsBlack()
         {
-            byte[] imgAsByte = GetImgFromPictureBox();
+            Bitmap myBitmap = (Bitmap)pictureBox.Image;
 
-            DataWorker w = new DataWorker();
-            w.WriteToFile(imgAsByte, "testImg");
+            for (int i = 0; i < Len; i++)
+            {
+                for (int j = 0; j < Len; j++)
+                {
+                    Color color = myBitmap.GetPixel(j, i);
 
+                    if (!color.IsWhite())
+                    {
+                        myBitmap.SetPixel(j, i, Color.Black);
+                    }
+                }
+            }
+
+            pictureBox.Image = myBitmap;
+        }
+
+        private void btnToNpyFile_Click(object sender, EventArgs e) => W.ImgToNpyFile();
+
+        private void btnSave_Click(object sender, EventArgs e)
+        {
             try
             {
-                Process myProcess = new Process();
-                Process.Start("notepad++.exe", @"C:\Useful\NN\txt\testImg.txt");
+                int index = int.Parse(txtbObjIndex.Text);
+                int count = W.SaveCurrentImgToData(index);
+                lblCount.Text = count.ToString();
+                ClearImage();
             }
             catch (Exception)
             {
-                MessageBox.Show("Could not open file");
+                MessageBox.Show("Dude, that is not a number.");
             }
+        }
+
+        private void btnSaveDataToNpy_Click(object sender, EventArgs e) => W.SaveCreatedDataToNpy();
+
+        private void btnMakeGrayBlack_Click(object sender, EventArgs e) => MakeGrayPixelsBlack();
+
+        private void btnRemoveLastInserted_Click(object sender, EventArgs e)
+        {
+            int index = int.Parse(txtbObjIndex.Text);
+            W.RemoveLastInserted(index);
+        }
+
+        private void btnCustomStuff_Click(object sender, EventArgs e)
+        {
+            W.DoCustomStuff();
         }
     }
 }

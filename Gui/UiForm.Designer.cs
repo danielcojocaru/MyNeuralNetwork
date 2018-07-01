@@ -39,6 +39,13 @@
             this.txtbObjIndex = new System.Windows.Forms.TextBox();
             this.btnToTxtFile = new System.Windows.Forms.Button();
             this.pictureBoxBig = new System.Windows.Forms.PictureBox();
+            this.btnToNpyFile = new System.Windows.Forms.Button();
+            this.btnSave = new System.Windows.Forms.Button();
+            this.btnSaveDataToNpy = new System.Windows.Forms.Button();
+            this.btnMakeGrayBlack = new System.Windows.Forms.Button();
+            this.lblCount = new System.Windows.Forms.Label();
+            this.btnRemoveLastInserted = new System.Windows.Forms.Button();
+            this.btnCustomStuff = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxBig)).BeginInit();
             this.SuspendLayout();
@@ -62,9 +69,6 @@
             this.pictureBox.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
             this.pictureBox.TabIndex = 2;
             this.pictureBox.TabStop = false;
-            this.pictureBox.MouseDown += new System.Windows.Forms.MouseEventHandler(this.pictureBox_MouseDown);
-            this.pictureBox.MouseMove += new System.Windows.Forms.MouseEventHandler(this.pictureBox_MouseMove);
-            this.pictureBox.MouseUp += new System.Windows.Forms.MouseEventHandler(this.pictureBox_MouseUp);
             // 
             // btnClear
             // 
@@ -132,6 +136,7 @@
             this.txtbObjIndex.Name = "txtbObjIndex";
             this.txtbObjIndex.Size = new System.Drawing.Size(116, 20);
             this.txtbObjIndex.TabIndex = 9;
+            this.txtbObjIndex.Text = "0";
             // 
             // btnToTxtFile
             // 
@@ -156,11 +161,88 @@
             this.pictureBoxBig.MouseMove += new System.Windows.Forms.MouseEventHandler(this.pictureBox_MouseMove);
             this.pictureBoxBig.MouseUp += new System.Windows.Forms.MouseEventHandler(this.pictureBox_MouseUp);
             // 
+            // btnToNpyFile
+            // 
+            this.btnToNpyFile.Location = new System.Drawing.Point(567, 182);
+            this.btnToNpyFile.Name = "btnToNpyFile";
+            this.btnToNpyFile.Size = new System.Drawing.Size(116, 39);
+            this.btnToNpyFile.TabIndex = 12;
+            this.btnToNpyFile.Text = "To npy file";
+            this.btnToNpyFile.UseVisualStyleBackColor = true;
+            this.btnToNpyFile.Click += new System.EventHandler(this.btnToNpyFile_Click);
+            // 
+            // btnSave
+            // 
+            this.btnSave.Location = new System.Drawing.Point(223, 12);
+            this.btnSave.Name = "btnSave";
+            this.btnSave.Size = new System.Drawing.Size(116, 39);
+            this.btnSave.TabIndex = 13;
+            this.btnSave.Text = "SAVE";
+            this.btnSave.UseVisualStyleBackColor = true;
+            this.btnSave.Click += new System.EventHandler(this.btnSave_Click);
+            // 
+            // btnSaveDataToNpy
+            // 
+            this.btnSaveDataToNpy.Location = new System.Drawing.Point(345, 12);
+            this.btnSaveDataToNpy.Name = "btnSaveDataToNpy";
+            this.btnSaveDataToNpy.Size = new System.Drawing.Size(116, 39);
+            this.btnSaveDataToNpy.TabIndex = 14;
+            this.btnSaveDataToNpy.Text = "SAVE data to npy";
+            this.btnSaveDataToNpy.UseVisualStyleBackColor = true;
+            this.btnSaveDataToNpy.Click += new System.EventHandler(this.btnSaveDataToNpy_Click);
+            // 
+            // btnMakeGrayBlack
+            // 
+            this.btnMakeGrayBlack.Location = new System.Drawing.Point(567, 137);
+            this.btnMakeGrayBlack.Name = "btnMakeGrayBlack";
+            this.btnMakeGrayBlack.Size = new System.Drawing.Size(116, 39);
+            this.btnMakeGrayBlack.TabIndex = 15;
+            this.btnMakeGrayBlack.Text = "Make gray Pix black";
+            this.btnMakeGrayBlack.UseVisualStyleBackColor = true;
+            this.btnMakeGrayBlack.Click += new System.EventHandler(this.btnMakeGrayBlack_Click);
+            // 
+            // lblCount
+            // 
+            this.lblCount.AutoSize = true;
+            this.lblCount.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblCount.Location = new System.Drawing.Point(274, 60);
+            this.lblCount.Name = "lblCount";
+            this.lblCount.Size = new System.Drawing.Size(20, 24);
+            this.lblCount.TabIndex = 16;
+            this.lblCount.Text = "0";
+            // 
+            // btnRemoveLastInserted
+            // 
+            this.btnRemoveLastInserted.Location = new System.Drawing.Point(467, 12);
+            this.btnRemoveLastInserted.Name = "btnRemoveLastInserted";
+            this.btnRemoveLastInserted.Size = new System.Drawing.Size(116, 39);
+            this.btnRemoveLastInserted.TabIndex = 17;
+            this.btnRemoveLastInserted.Text = "Remove Last Inserted";
+            this.btnRemoveLastInserted.UseVisualStyleBackColor = true;
+            this.btnRemoveLastInserted.Click += new System.EventHandler(this.btnRemoveLastInserted_Click);
+            // 
+            // btnCustomStuff
+            // 
+            this.btnCustomStuff.Location = new System.Drawing.Point(201, 317);
+            this.btnCustomStuff.Name = "btnCustomStuff";
+            this.btnCustomStuff.Size = new System.Drawing.Size(116, 39);
+            this.btnCustomStuff.TabIndex = 18;
+            this.btnCustomStuff.Text = "Do Custom Stuff";
+            this.btnCustomStuff.UseVisualStyleBackColor = true;
+            this.btnCustomStuff.Click += new System.EventHandler(this.btnCustomStuff_Click);
+            // 
             // UiForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(718, 391);
+            this.Controls.Add(this.btnCustomStuff);
+            this.Controls.Add(this.btnRemoveLastInserted);
+            this.Controls.Add(this.lblCount);
+            this.Controls.Add(this.btnMakeGrayBlack);
+            this.Controls.Add(this.btnSaveDataToNpy);
+            this.Controls.Add(this.btnSave);
+            this.Controls.Add(this.btnToNpyFile);
             this.Controls.Add(this.pictureBoxBig);
             this.Controls.Add(this.btnToTxtFile);
             this.Controls.Add(this.txtbObjIndex);
@@ -195,6 +277,13 @@
         private System.Windows.Forms.TextBox txtbObjIndex;
         private System.Windows.Forms.Button btnToTxtFile;
         private System.Windows.Forms.PictureBox pictureBoxBig;
+        private System.Windows.Forms.Button btnToNpyFile;
+        private System.Windows.Forms.Button btnSave;
+        private System.Windows.Forms.Button btnSaveDataToNpy;
+        private System.Windows.Forms.Button btnMakeGrayBlack;
+        private System.Windows.Forms.Label lblCount;
+        private System.Windows.Forms.Button btnRemoveLastInserted;
+        private System.Windows.Forms.Button btnCustomStuff;
     }
 }
 

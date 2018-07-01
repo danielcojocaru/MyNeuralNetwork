@@ -1,6 +1,7 @@
 ﻿using MathNet.Numerics.LinearAlgebra;
 using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -73,6 +74,13 @@ namespace Auxiliar.Other
             }
 
             return toReturn;
+        }
+
+        public static bool IsWhite(this Color @color)
+        {
+            string colorName = @color.Name;
+            bool isWhite = colorName.Equals("0") || colorName.Equals("ffffffff");
+            return isWhite;
         }
     }
 }
