@@ -30,7 +30,7 @@ namespace Auxiliar.Wrapper
 
         public override string ToString()
         {
-            return string.Format("Correct = {0} ~ Tested = {1} ~ Percentage = {2}", Correct, Tested, Percentage);
+            return string.Format("Percentage = {0} / Correct = {1} / Tested = {2}", Percentage, Correct, Tested);
         }
     }
 }

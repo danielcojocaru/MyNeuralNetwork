@@ -13,7 +13,8 @@ namespace Auxiliar.Worker
     {
         public const int _len = 28;
         public const int _total = _len * _len; // 784
-        public const int _dataLen = 1000;
+        public const int _dataLenTrain = 100000;
+        public const int _dataLenTest = 2000;
 
         public int Prefix;
 
@@ -166,16 +167,16 @@ namespace Auxiliar.Worker
         public List<List<byte[]>> GetTestData()
         {
             // 1000 x 
-            int skipBytes = _dataLen * _total;
+            int skipBytes = _dataLenTrain * _total;
             //int dataLen = _dataLen / 5;
-            int dataLen = 200;
+           
 
-            List<List<byte[]>> testData = GetTrainData(skipBytes, dataLen); 
+            List<List<byte[]>> testData = GetTrainData(skipBytes, _dataLenTest); 
 
             return testData;
         }
 
-        public List<List<byte[]>> GetTrainData(int skipBytes = 0, int dataLen = _dataLen)
+        public List<List<byte[]>> GetTrainData(int skipBytes = 0, int dataLen = _dataLenTrain)
         {
             List<List<byte[]>> data = new List<List<byte[]>>();
 

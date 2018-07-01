@@ -30,7 +30,7 @@ namespace Gui
             Form = uiForm;
 
             DataWorker = new DataWorker();
-            DataWorker.Create(new WrapperFileWorker() { Problem = ProblemEnum.OwnDigits });
+            DataWorker.Create(new WrapperFileWorker() { Problem = ProblemEnum.QuickDraw });
             DataWorker.Initialize();
             List<List<byte[]>> data = DataWorker.GetTrainData();
             List<List<byte[]>> testData = DataWorker.GetTestData();
@@ -80,7 +80,7 @@ namespace Gui
                 try
                 {
                     byte[] img = GetRandom(Trainer.Data, index);
-                    //MessageBox.Show("No test data found.");
+                    MessageBox.Show("No test data found.");
                     return img;
                 }
                 catch (Exception)
