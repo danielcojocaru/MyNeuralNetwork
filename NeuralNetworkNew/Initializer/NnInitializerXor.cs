@@ -10,6 +10,7 @@ using System.Threading.Tasks;
 
 namespace NeuralNetworkNew.Initializer
 {
+    [Serializable]
     public class NnInitializerXor : INeuralNetworkInitializer
     {
         public List<Matrix<double>> WList { get; set; } = new List<Matrix<double>>()

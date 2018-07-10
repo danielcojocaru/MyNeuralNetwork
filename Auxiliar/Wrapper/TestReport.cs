@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -9,8 +10,8 @@ namespace Auxiliar.Wrapper
     public class TestReport
     {
         public EntityTestReport TestReportAgg { get; set; } = new EntityTestReport();
-        public List<EntityTestReport> ReportProEntity { get; set; } = new List<EntityTestReport>();
-
+        public ConcurrentDictionary<int, EntityTestReport> ReportProEntity { get; set; } = new ConcurrentDictionary<int, EntityTestReport>();
+        
         public TestReport()
         {
         }
@@ -19,7 +20,7 @@ namespace Auxiliar.Wrapper
         {
             for (int i = 0; i < count; i++)
             {
-                ReportProEntity.Add(new EntityTestReport());
+                ReportProEntity.TryAdd(i, new EntityTestReport());
             }
         }
 

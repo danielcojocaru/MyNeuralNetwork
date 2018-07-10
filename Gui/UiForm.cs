@@ -27,8 +27,17 @@ namespace Gui
             InitializeFields();
             InitializeWorker();
             InitializePaint();
+
+            W.Trainer.TrainingStepDone += Trainer_TrainingStepDone;
         }
 
+        private void Trainer_TrainingStepDone(object sender, NeuralNetworkNew.Worker.TrainingStepDoneArgs e)
+        {
+            Invoke(new Action(() =>
+            {
+                lblCorrectTrained.Text = (((double)e.Correct) / ((double)e.StepsToCalculatePrecision) * 100).ToString() + "% - Correct";
+            }));
+        }
 
         private void UiForm_Load(object sender, EventArgs e)
         {
@@ -46,16 +55,21 @@ namespace Gui
             //W.Train();
         }
 
-        private Pen PenSmall;
+        private Pen Pen;
         private bool Moving;
         private int X;
         private int Y;
 
         private void InitializePaint()
         {
-            PenSmall = new Pen(Color.Black, 10);
-            PenSmall.StartCap = PenSmall.EndCap = System.Drawing.Drawing2D.LineCap.Round;
+            CreateNewPen((int)numericUpDownPenSize.Value);
             ClearImage();
+        }
+
+        private void CreateNewPen(int width)
+        {
+            Pen = new Pen(Color.Black, width);
+            Pen.StartCap = Pen.EndCap = System.Drawing.Drawing2D.LineCap.Round;
         }
 
         private void ClearImage()
@@ -77,24 +91,12 @@ namespace Gui
         private void Guess()
         {
             byte[] imgAsByte = GetImgFromPictureBox();
-
-            //DataWorker w = new DataWorker();
-            //w.WriteToFile(imgAsByte, "testImg");
-
-            int guessed = W.Guess(imgAsByte);
-            lblGuess.Text = guessed.ToString();
+            lblGuess.Text = W.Guess(imgAsByte);
         }
 
         public byte[] GetImgFromPictureBox()
         {
-            //Bitmap MyBitmap = ScaleImage(pictureBox.Image, 28, 28);
-            //this.pictureBox.SizeMode = PictureBoxSizeMode.StretchImage;
-            //pictureBox.Scale(new SizeF(0.1F, 0.1F));
             Bitmap myBitmap = (Bitmap)pictureBox.Image;
-
-            //int h = myBitmap.Height;
-            //int w = myBitmap.Width;
-
 
             byte[] imgAsByte = new byte[Len * Len];
             int index = -1;
@@ -122,7 +124,6 @@ namespace Gui
             Moving = true;
             X = e.X;
             Y = e.Y;
-            //pictureBoxBig.Cursor = Cursors.Arrow;
         }
 
         private void pictureBox_MouseUp(object sender, MouseEventArgs e)
@@ -130,6 +131,7 @@ namespace Gui
             Moving = false;
             X = -1;
             Y = -1;
+
             //pictureBoxBig.Cursor = Cursors.Default;
 
             //Guess();
@@ -146,16 +148,23 @@ namespace Gui
                 Image image = pictureBoxBig.Image;
                 using (Graphics g = Graphics.FromImage(image))
                 {
-                    g.DrawLine(PenSmall, new Point(X, Y), e.Location);
+                    g.DrawLine(Pen, new Point(X, Y), e.Location);
                 }
                 pictureBoxBig.Image = image;
-                pictureBox.Image = ResizeImage(image, pictureBox.Width, pictureBox.Height);
-                MakeGrayPixelsBlack();
+
+                ResizeImgFromTo(pictureBoxBig, pictureBox);
+
                 X = e.X;
                 Y = e.Y;
 
                 Guess();
             }
+        }
+
+        public void ResizeImgFromTo(PictureBox from, PictureBox to)
+        {
+            to.Image = ResizeImage(from.Image, to.Width, to.Height);
+            MakeGrayPixelsBlack(to);
         }
 
         public static Bitmap ResizeImage(Image image, int width, int height)
@@ -195,7 +204,29 @@ namespace Gui
 
         private void btnTest_Click(object sender, EventArgs e)
         {
+            this.Cursor = Cursors.WaitCursor;
+
             TestReport report = W.Test();
+            DisplayReport(report);
+
+            this.Cursor = Cursors.Default;
+        }
+
+        private void DisplayReport(TestReport report)
+        {
+            StringBuilder sb = new StringBuilder();
+            sb.Append("TOTAL:\t\t").Append(report.TestReportAgg.ToString()).AppendLine().AppendLine();
+
+            foreach (var keyValue in report.ReportProEntity)
+            {
+                int index = keyValue.Key;
+                EntityTestReport entityReport = keyValue.Value;
+
+                string entityName = W.GetEntityName(index);
+                sb.Append(entityName).Append(":\t\t").Append(entityReport.ToString()).AppendLine();
+            }
+
+            MessageBox.Show(sb.ToString());
         }
 
         private void btnShow_Click(object sender, EventArgs e)
@@ -205,6 +236,7 @@ namespace Gui
             {
                 byte[] img = W.GetRandomImage(index);
                 ApplyByteImg(img);
+                ResizeImgFromTo(pictureBox, pictureBoxBig);
             }
             else
             {
@@ -229,9 +261,9 @@ namespace Gui
 
         private void btnToTxtFile_Click(object sender, EventArgs e) => W.ImgToTxtFile();
 
-        private void MakeGrayPixelsBlack()
+        private void MakeGrayPixelsBlack(PictureBox picBox)
         {
-            Bitmap myBitmap = (Bitmap)pictureBox.Image;
+            Bitmap myBitmap = (Bitmap)picBox.Image;
 
             for (int i = 0; i < Len; i++)
             {
@@ -246,7 +278,7 @@ namespace Gui
                 }
             }
 
-            pictureBox.Image = myBitmap;
+            picBox.Image = myBitmap;
         }
 
         private void btnToNpyFile_Click(object sender, EventArgs e) => W.ImgToNpyFile();
@@ -268,7 +300,7 @@ namespace Gui
 
         private void btnSaveDataToNpy_Click(object sender, EventArgs e) => W.SaveCreatedDataToNpy();
 
-        private void btnMakeGrayBlack_Click(object sender, EventArgs e) => MakeGrayPixelsBlack();
+        private void btnMakeGrayBlack_Click(object sender, EventArgs e) => MakeGrayPixelsBlack(pictureBox);
 
         private void btnRemoveLastInserted_Click(object sender, EventArgs e)
         {
@@ -279,6 +311,21 @@ namespace Gui
         private void btnCustomStuff_Click(object sender, EventArgs e)
         {
             W.DoCustomStuff();
+        }
+
+        private void numericUpDownPenSize_ValueChanged(object sender, EventArgs e)
+        {
+            CreateNewPen((int)(sender as NumericUpDown).Value);
+        }
+
+        private void btnSerialize_Click(object sender, EventArgs e)
+        {
+            W.Serialize();
+        }
+
+        private void btnDeserialize_Click(object sender, EventArgs e)
+        {
+            W.Deserialize();
         }
     }
 }

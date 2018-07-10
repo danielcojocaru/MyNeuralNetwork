@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Net;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -68,7 +69,7 @@ namespace Auxiliar.Worker
 
         public void CreateBlackAndWhiteTxtFilesUsingNpy()
         {
-            Parallel.ForEach(Entities, /*new ParallelOptions() { MaxDegreeOfParallelism = Environment.ProcessorCount},*/ (entity) =>
+            Parallel.ForEach(Entities, new ParallelOptions() { MaxDegreeOfParallelism = Environment.ProcessorCount}, (entity) =>
             //foreach (string entity in Entities)
             {
                 byte[] data = File.ReadAllBytes(GetFilesPath(entity));
@@ -79,34 +80,10 @@ namespace Auxiliar.Worker
 
         public void DoCustomStuff()
         {
-            //byte[] data1 = File.ReadAllBytes(@"C:\Useful\NN\Created\Data6.npy");
-            //byte[] data2 = File.ReadAllBytes(@"C:\Useful\NN\Created\Data5.npy");
-
-            //int len1 = data1.Length;
-            //int len2 = data2.Length;
-
-            //byte[] the8 = new byte[len2];
-            //byte[] the9 = new byte[len2];
-
-
-            //for (int i = 0; i < len2; i++)
-            //{
-            //    the8[i] = data1[i];
-            //}
-
-            //int index = -1;
-            //for (int i = 78400; i < data1.Length; i++)
-            //{
-            //    index++;
-            //    the9[index] = data1[i];
-            //}
-
-            //WriteToNpyFile(the8, 8);
-            //WriteToNpyFile(the9, 9);
-
+            // Nothing here
         }
 
-        public void WriteToTxtFile(byte[] data, string entity)
+        public string WriteToTxtFile(byte[] data, string entity)
         {
             string targetFile = Path.Combine(TxtDirectoryPath, entity + ".txt");
             using (StreamWriter writer = new StreamWriter(targetFile))
@@ -122,6 +99,7 @@ namespace Auxiliar.Worker
                     }
                 }
             }
+            return targetFile;
         }
 
         public void WriteToNpyFile(byte[] data, int entityIndex)
@@ -178,11 +156,14 @@ namespace Auxiliar.Worker
 
         public List<List<byte[]>> GetTrainData(int skipBytes = 0, int dataLen = _dataLenTrain)
         {
-            List<List<byte[]>> data = new List<List<byte[]>>();
+            GetFilesIfMissing();
 
+            List<List<byte[]>> data = new List<List<byte[]>>();
             foreach (string fileName in Entities)
             {
-                byte[] dataFromFile = File.ReadAllBytes(GetFilesPath(fileName));
+                string filePath = GetFilesPath(fileName);
+
+                byte[] dataFromFile = File.ReadAllBytes(filePath);
                 List<byte[]> list = new List<byte[]>();
                 data.Add(list);
 
@@ -208,40 +189,31 @@ namespace Auxiliar.Worker
             return data;
         }
 
-        //private List<List<byte[]>> GetTrainDataForDigits_2()
-        //{
-        //    List<List<byte[]>> data = new List<List<byte[]>>();
-        //    byte[] dataFromFile = File.ReadAllBytes(GetFilesPath("digits_2_train"));
+        private void GetFilesIfMissing()
+        {
+            // Google is unfriendly
+            //string imgUrl = "https://storage.cloud.google.com/quickdraw_dataset/full/numpy_bitmap/apple.npy";
 
-        //    //WriteToFile(dataFromFile, "All");
 
-        //    for (int k = 0; k < 10; k++)
-        //    {
-        //        int skipBytes = 6000 * k;
+            //Parallel.ForEach(Entities, new ParallelOptions() { MaxDegreeOfParallelism = Environment.ProcessorCount}, (entity) =>
+            //{
+            //    //using (WebClient wc = new WebClient())
+            //    //{
+            //    //    wc.Headers[HttpRequestHeader.UserAgent] = "Mozilla/5.0 (Windows NT 5.1; rv:10.0.2) Gecko/20100101 Firefox/10.0.2";
+            //    //    wc.DownloadFile(imgUrl, "apple.npy");
+            //    //    //byte[] data = wc.DownloadData(imgUrl);
+            //    //}
 
-        //        List<byte[]> list = new List<byte[]>();
-        //        data.Add(list);
 
-        //        int j = 0;
-        //        byte[] currentBytes = new byte[_total];
-        //        for (int i = Prefix + skipBytes; i < Prefix + skipBytes + 6000 * _total; i++)
-        //        {
-        //            currentBytes[j] = dataFromFile[i] == 0 ? (byte)0 : (byte)1;
-        //            //currentBytes[j] = data[i];
+            //    using (CookiesAwareWebClient client = new CookiesAwareWebClient())
+            //    {
 
-        //            if (++j == _total)
-        //            {
-        //                list.Add(currentBytes);
-        //                j = 0;
-        //                currentBytes = new byte[_total];
-        //            }
-        //        }
-        //    }
+            //    }
 
-        //    //WriteToFile(data[0][0], "0");
-        //    //WriteToFile(data[0][data[0].Count - 1], "0Final");
 
-        //    return data;
-        //}
+            //});
+
+
+        }
     }
 }

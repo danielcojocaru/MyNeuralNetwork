@@ -55,6 +55,7 @@
     <Compile Include="Common\Interface\INeuralNetwork.cs" />
     <Compile Include="Common\Interface\INeuralNetworkInitializer.cs" />
     <Compile Include="Other\ExtensionMethods.cs" />
+    <Compile Include="Other\StaticMethodsClass.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Worker\DataWorker.cs" />
     <Compile Include="Wrapper\EntityTestReport.cs" />

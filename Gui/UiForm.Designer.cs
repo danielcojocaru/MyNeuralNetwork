@@ -46,8 +46,14 @@
             this.lblCount = new System.Windows.Forms.Label();
             this.btnRemoveLastInserted = new System.Windows.Forms.Button();
             this.btnCustomStuff = new System.Windows.Forms.Button();
+            this.numericUpDownPenSize = new System.Windows.Forms.NumericUpDown();
+            this.label1 = new System.Windows.Forms.Label();
+            this.btnDeserialize = new System.Windows.Forms.Button();
+            this.btnSerialize = new System.Windows.Forms.Button();
+            this.lblCorrectTrained = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxBig)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDownPenSize)).BeginInit();
             this.SuspendLayout();
             // 
             // btnGuess
@@ -104,7 +110,7 @@
             // 
             this.lblGuess.AutoSize = true;
             this.lblGuess.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblGuess.Location = new System.Drawing.Point(381, 60);
+            this.lblGuess.Location = new System.Drawing.Point(368, 60);
             this.lblGuess.Name = "lblGuess";
             this.lblGuess.Size = new System.Drawing.Size(71, 24);
             this.lblGuess.TabIndex = 6;
@@ -163,6 +169,7 @@
             // 
             // btnToNpyFile
             // 
+            this.btnToNpyFile.Enabled = false;
             this.btnToNpyFile.Location = new System.Drawing.Point(567, 182);
             this.btnToNpyFile.Name = "btnToNpyFile";
             this.btnToNpyFile.Size = new System.Drawing.Size(116, 39);
@@ -193,6 +200,7 @@
             // 
             // btnMakeGrayBlack
             // 
+            this.btnMakeGrayBlack.Enabled = false;
             this.btnMakeGrayBlack.Location = new System.Drawing.Point(567, 137);
             this.btnMakeGrayBlack.Name = "btnMakeGrayBlack";
             this.btnMakeGrayBlack.Size = new System.Drawing.Size(116, 39);
@@ -223,6 +231,7 @@
             // 
             // btnCustomStuff
             // 
+            this.btnCustomStuff.Enabled = false;
             this.btnCustomStuff.Location = new System.Drawing.Point(201, 317);
             this.btnCustomStuff.Name = "btnCustomStuff";
             this.btnCustomStuff.Size = new System.Drawing.Size(116, 39);
@@ -231,11 +240,69 @@
             this.btnCustomStuff.UseVisualStyleBackColor = true;
             this.btnCustomStuff.Click += new System.EventHandler(this.btnCustomStuff_Click);
             // 
+            // numericUpDownPenSize
+            // 
+            this.numericUpDownPenSize.Location = new System.Drawing.Point(77, 158);
+            this.numericUpDownPenSize.Name = "numericUpDownPenSize";
+            this.numericUpDownPenSize.Size = new System.Drawing.Size(140, 20);
+            this.numericUpDownPenSize.TabIndex = 19;
+            this.numericUpDownPenSize.Value = new decimal(new int[] {
+            10,
+            0,
+            0,
+            0});
+            this.numericUpDownPenSize.ValueChanged += new System.EventHandler(this.numericUpDownPenSize_ValueChanged);
+            // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Location = new System.Drawing.Point(21, 160);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(50, 13);
+            this.label1.TabIndex = 20;
+            this.label1.Text = "Pen size:";
+            // 
+            // btnDeserialize
+            // 
+            this.btnDeserialize.Location = new System.Drawing.Point(77, 317);
+            this.btnDeserialize.Name = "btnDeserialize";
+            this.btnDeserialize.Size = new System.Drawing.Size(116, 39);
+            this.btnDeserialize.TabIndex = 21;
+            this.btnDeserialize.Text = "Deserialize";
+            this.btnDeserialize.UseVisualStyleBackColor = true;
+            this.btnDeserialize.Click += new System.EventHandler(this.btnDeserialize_Click);
+            // 
+            // btnSerialize
+            // 
+            this.btnSerialize.Enabled = false;
+            this.btnSerialize.Location = new System.Drawing.Point(77, 272);
+            this.btnSerialize.Name = "btnSerialize";
+            this.btnSerialize.Size = new System.Drawing.Size(116, 39);
+            this.btnSerialize.TabIndex = 22;
+            this.btnSerialize.Text = "Serialize";
+            this.btnSerialize.UseVisualStyleBackColor = true;
+            this.btnSerialize.Click += new System.EventHandler(this.btnSerialize_Click);
+            // 
+            // lblCorrectTrained
+            // 
+            this.lblCorrectTrained.AutoSize = true;
+            this.lblCorrectTrained.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblCorrectTrained.Location = new System.Drawing.Point(327, 250);
+            this.lblCorrectTrained.Name = "lblCorrectTrained";
+            this.lblCorrectTrained.Size = new System.Drawing.Size(90, 16);
+            this.lblCorrectTrained.TabIndex = 23;
+            this.lblCorrectTrained.Text = "0.0% - Correct";
+            // 
             // UiForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(718, 391);
+            this.Controls.Add(this.lblCorrectTrained);
+            this.Controls.Add(this.btnSerialize);
+            this.Controls.Add(this.btnDeserialize);
+            this.Controls.Add(this.label1);
+            this.Controls.Add(this.numericUpDownPenSize);
             this.Controls.Add(this.btnCustomStuff);
             this.Controls.Add(this.btnRemoveLastInserted);
             this.Controls.Add(this.lblCount);
@@ -260,6 +327,7 @@
             this.Load += new System.EventHandler(this.UiForm_Load);
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxBig)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDownPenSize)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -284,6 +352,11 @@
         private System.Windows.Forms.Label lblCount;
         private System.Windows.Forms.Button btnRemoveLastInserted;
         private System.Windows.Forms.Button btnCustomStuff;
+        private System.Windows.Forms.NumericUpDown numericUpDownPenSize;
+        private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.Button btnDeserialize;
+        private System.Windows.Forms.Button btnSerialize;
+        private System.Windows.Forms.Label lblCorrectTrained;
     }
 }
 

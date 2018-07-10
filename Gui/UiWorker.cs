@@ -1,6 +1,8 @@
 ﻿using Auxiliar.Common.Enum;
+using Auxiliar.Other;
 using Auxiliar.Worker;
 using Auxiliar.Wrapper;
+using NeuralNetworkNew.Body;
 using NeuralNetworkNew.Worker;
 using NeuralNetworkNew.Wrapper;
 using System;
@@ -18,6 +20,7 @@ namespace Gui
         public UiForm Form { get; set; }
         public Trainer Trainer { get; set; }
         public DataWorker DataWorker { get; set; }
+
 
         public Dictionary<int, List<byte[]>> CreatedData { get; set; } = new Dictionary<int, List<byte[]>>();
 
@@ -57,9 +60,18 @@ namespace Gui
             Trainer.StopTraining();
         }
 
-        public int Guess(byte[] imgAsByte)
+        public string Guess(byte[] imgAsByte)
         {
-            return Trainer.Guess(imgAsByte);
+            int index = Trainer.Guess(imgAsByte);
+            string guessed = DataWorker.Entities[index];
+
+            return guessed;
+        }
+
+        public string GetEntityName(int index)
+        {
+            string entity = DataWorker.Entities[index];
+            return entity;
         }
 
         public TestReport Test()
@@ -120,13 +132,12 @@ namespace Gui
             byte[] imgAsByte = Form.GetImgFromPictureBox();
 
             DataWorker w = new DataWorker();
-            w.WriteToTxtFile(imgAsByte, "testImg");
-            string filePath = string.Format(@"C:\Useful\NN\Created\{0}.npy", fileName);
+            string filePath = w.WriteToTxtFile(imgAsByte, "testImg");
 
             try
             {
                 Process myProcess = new Process();
-                Process.Start("notepad++.exe", filePath);
+                Process.Start("notepad.exe", filePath);
             }
             catch (Exception)
             {
@@ -185,6 +196,24 @@ namespace Gui
         public void DoCustomStuff()
         {
             DataWorker.DoCustomStuff();
+        }
+
+        public void Serialize()
+        {
+            StaticMethodsClass.WriteToBinaryFile(@"C:\Useful\NN\BestOne.txt", Trainer.Nn);
+        }
+
+        public void Deserialize()
+        {
+            NeuralNetworkCls serializedNn = GetSerializedCls();
+            Trainer.Nn = serializedNn;
+        }
+
+        private NeuralNetworkCls GetSerializedCls()
+        {
+            string path = Environment.CurrentDirectory + "\\Serialized\\BestOne.txt";
+            NeuralNetworkCls serializedNn = StaticMethodsClass.ReadFromBinaryFile<NeuralNetworkCls>(path);
+            return serializedNn;
         }
     }
 }

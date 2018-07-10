@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 
 namespace NeuralNetworkNew.Initializer
 {
+    [Serializable]
     public class FunctionInitializerRandom : IFunctionInitializer
     {
         public ErrorEvaluatorEnum GetErrorEvaluatorEnum()

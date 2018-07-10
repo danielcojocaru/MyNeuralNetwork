@@ -24,7 +24,25 @@ namespace NeuralNetworkNew.Worker
         public int StepForPrecision { get; set; } = -1;
         public double Precision { get; set; } = 0;
 
-        public int MyProperty { get; set; }
+        private string _trainStepInfo;
+        public string TrainStepInfo
+        {
+            get => _trainStepInfo;
+            set
+            {
+                _trainStepInfo = value;
+            }
+        }
+
+        public event EventHandler<TrainingStepDoneArgs> TrainingStepDone;
+
+        private void OnTrainingStepDone(TrainingStepDoneArgs e)
+        {
+            if (TrainingStepDone != null)
+            {
+                TrainingStepDone(this, e);
+            }
+        }
 
         public void Create(WrapperTrainer wrapper)
         {
@@ -62,7 +80,7 @@ namespace NeuralNetworkNew.Worker
 
             int nrOfInputs = DataWorker._total;
 
-            nn.Create(new int[] { nrOfInputs, 64, 64, Data.Count });
+            nn.Create(new int[] { nrOfInputs, 100, 100, Data.Count });
             nn.Initialize();
 
             Nn = nn;
@@ -115,8 +133,6 @@ namespace NeuralNetworkNew.Worker
             int objCount = Data.Count;
             int imgCount = Data[0].Count;
 
-            double max = 0;
-
             while (!IsStopTraining)
             {
                 Step++;
@@ -140,8 +156,8 @@ namespace NeuralNetworkNew.Worker
                 //if (true)
                 {
                     StepForPrecision = -1;
-                    //Precision = Nn.LastNeurons.O[objIndex, 0];
-                    Console.WriteLine(Correct);
+                    OnTrainingStepDone(new TrainingStepDoneArgs(StepsToCalculatePrecision, Correct));
+                    //Console.WriteLine((((float)Correct) / 10).ToString() + " % - Correct");
 
                     Nn.Lr = ((double)StepsToCalculatePrecision - (double)Correct) / (double)StepsToCalculatePrecision / 100D * 2D;
 
@@ -149,6 +165,7 @@ namespace NeuralNetworkNew.Worker
                 }
             }
         }
+
 
         private bool AnswerIsCorrect(double[] answer)
         {
@@ -180,6 +197,8 @@ namespace NeuralNetworkNew.Worker
 
         public int Guess(byte[] imgAsByte)
         {
+
+
             double[] input = imgAsByte.Select(Convert.ToDouble).ToArray();
             Nn.Forward(input, null, doBackpropagation: false);
 
