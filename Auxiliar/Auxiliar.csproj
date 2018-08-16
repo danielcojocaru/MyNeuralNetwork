@@ -63,6 +63,7 @@
     <Compile Include="Wrapper\WrapperFileWorker.cs" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="ExternalFiles\Nn.xlsx" />
     <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
