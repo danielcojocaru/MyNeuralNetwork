@@ -60,12 +60,12 @@ namespace Gui
             Trainer.StopTraining();
         }
 
-        public string Guess(byte[] imgAsByte)
+        public Guess Guess(byte[] imgAsByte)
         {
-            int index = Trainer.Guess(imgAsByte);
-            string guessed = DataWorker.Entities[index];
+            Guess guess = Trainer.Guess(imgAsByte);
+            guess.EntityName = DataWorker.Entities[guess.Index];
 
-            return guessed;
+            return guess;
         }
 
         public string GetEntityName(int index)

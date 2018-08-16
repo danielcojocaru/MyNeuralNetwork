@@ -1,6 +1,7 @@
 ﻿using Auxiliar.Other;
 using Auxiliar.Worker;
 using Auxiliar.Wrapper;
+using NeuralNetworkNew.Wrapper;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -91,7 +92,9 @@ namespace Gui
         private void Guess()
         {
             byte[] imgAsByte = GetImgFromPictureBox();
-            lblGuess.Text = W.Guess(imgAsByte);
+            Guess guess = W.Guess(imgAsByte);
+            lblGuess.Text = guess.EntityName;
+            lblProcent.Text = guess.Procent.ToString();
         }
 
         public byte[] GetImgFromPictureBox()

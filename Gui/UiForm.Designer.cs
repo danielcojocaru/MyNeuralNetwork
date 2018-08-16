@@ -51,6 +51,7 @@
             this.btnDeserialize = new System.Windows.Forms.Button();
             this.btnSerialize = new System.Windows.Forms.Button();
             this.lblCorrectTrained = new System.Windows.Forms.Label();
+            this.lblProcent = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxBig)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownPenSize)).BeginInit();
@@ -293,11 +294,22 @@
             this.lblCorrectTrained.TabIndex = 23;
             this.lblCorrectTrained.Text = "0.0% - Correct";
             // 
+            // lblProcent
+            // 
+            this.lblProcent.AutoSize = true;
+            this.lblProcent.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblProcent.Location = new System.Drawing.Point(368, 84);
+            this.lblProcent.Name = "lblProcent";
+            this.lblProcent.Size = new System.Drawing.Size(85, 24);
+            this.lblProcent.TabIndex = 24;
+            this.lblProcent.Text = "[Procent]";
+            // 
             // UiForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(718, 391);
+            this.Controls.Add(this.lblProcent);
             this.Controls.Add(this.lblCorrectTrained);
             this.Controls.Add(this.btnSerialize);
             this.Controls.Add(this.btnDeserialize);
@@ -357,6 +369,7 @@
         private System.Windows.Forms.Button btnDeserialize;
         private System.Windows.Forms.Button btnSerialize;
         private System.Windows.Forms.Label lblCorrectTrained;
+        private System.Windows.Forms.Label lblProcent;
     }
 }
 

@@ -195,26 +195,26 @@ namespace NeuralNetworkNew.Worker
             return isCorrect;
         }
 
-        public int Guess(byte[] imgAsByte)
+        public Guess Guess(byte[] imgAsByte)
         {
-
+            Guess guess = new Guess();
 
             double[] input = imgAsByte.Select(Convert.ToDouble).ToArray();
             Nn.Forward(input, null, doBackpropagation: false);
 
-            int maxIndex = 0;
-            double max = -1;
+            guess.Index = 0;
+            guess.Procent = -1;
             for (int i = 0; i < Nn.LastNeurons.O.RowCount; i++)
             {
                 double current = Nn.LastNeurons.O[i, 0];
-                if (max < current)
+                if (guess.Procent < current)
                 {
-                    max = current;
-                    maxIndex = i;
+                    guess.Procent = current;
+                    guess.Index = i;
                 }
             }
 
-            return maxIndex;
+            return guess;
         }
 
         private int Correct = 0;

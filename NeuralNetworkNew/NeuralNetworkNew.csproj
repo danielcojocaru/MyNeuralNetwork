@@ -57,6 +57,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Worker\Trainer.cs" />
     <Compile Include="Worker\TrainingStepDoneArgs.cs" />
+    <Compile Include="Wrapper\Guess.cs" />
     <Compile Include="Wrapper\WrapperTrainer.cs" />
   </ItemGroup>
   <ItemGroup>
