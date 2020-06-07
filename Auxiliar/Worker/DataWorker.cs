@@ -21,9 +21,9 @@ namespace Auxiliar.Worker
 
         public List<string> Entities { get; set; }
 
-        public string NpyDirectoryPath { get; set; } = @"C:\Useful\NN\npy";
-        public string TxtDirectoryPath { get; set; } = @"C:\Useful\NN\txt";
-        public string CreatedDirectoryPath { get; set; } = @"C:\Useful\NN\Created";
+        public string NpyDirectoryPath { get; set; } = @"C:\Temp\NN\npy";
+        public string TxtDirectoryPath { get; set; } = @"C:\Temp\NN\txt";
+        public string CreatedDirectoryPath { get; set; } = @"C:\Temp\NN\Created";
         public string FilesPath { get; set; }
 
 

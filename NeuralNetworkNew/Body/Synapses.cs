@@ -63,19 +63,49 @@ namespace NeuralNetworkNew.Body
         {
             if (matrix != null)
             {
-                Random random = new Random();
                 for (int row = 0; row < matrix.RowCount; row++)
                 {
                     for (int col = 0; col < matrix.ColumnCount; col++)
                     {
-                        double ran = (double)random.NextDouble() * 2D - 1D;
-                        //double ran = (double)(random.NextDouble() + 0.5D) * 10D;
+                        int mean = 0;
+                        int stdDev = 1;
 
-                        matrix[row, col] = ran;
+                        double u1 = 1.0 - _random.NextDouble(); //uniform(0,1] random doubles
+                        double u2 = 1.0 - _random.NextDouble();
+                        double randStdNormal = Math.Sqrt(-2.0 * Math.Log(u1)) *
+                                     Math.Sin(2.0 * Math.PI * u2); //random normal(0,1)
+                        double randNormal = mean + stdDev * randStdNormal; //random normal(mean,stdDev^2)
+
+                        randNormal *= Math.Sqrt(2D / matrix.ColumnCount);
+
+                        //double randNormal = (double)_random.NextDouble() * 2D - 1D;
+
+                        matrix[row, col] = randNormal;
                     }
                 }
             }
         }
+
+        private double CalculateStandardDeviation(IEnumerable<double> values)
+        {
+            double standardDeviation = 0;
+
+            if (values.Any())
+            {
+                // Compute the average.     
+                double avg = values.Average();
+
+                // Perform the Sum of (value-avg)_2_2.      
+                double sum = values.Sum(d => Math.Pow(d - avg, 2));
+
+                // Put it all together.      
+                standardDeviation = Math.Sqrt((sum) / (values.Count() - 1));
+            }
+
+            return standardDeviation;
+        }
+
+        private static Random _random = new Random();
 
         public void Forward(Matrix<double> o)
         {

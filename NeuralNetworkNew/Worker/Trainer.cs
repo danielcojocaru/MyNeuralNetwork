@@ -80,7 +80,7 @@ namespace NeuralNetworkNew.Worker
 
             int nrOfInputs = DataWorker._total;
 
-            nn.Create(new int[] { nrOfInputs, 100, 100, Data.Count });
+            nn.Create(new int[] { nrOfInputs, 32, 64, Data.Count });
             nn.Initialize();
 
             Nn = nn;
@@ -159,7 +159,7 @@ namespace NeuralNetworkNew.Worker
                     OnTrainingStepDone(new TrainingStepDoneArgs(StepsToCalculatePrecision, Correct));
                     //Console.WriteLine((((float)Correct) / 10).ToString() + " % - Correct");
 
-                    Nn.Lr = ((double)StepsToCalculatePrecision - (double)Correct) / (double)StepsToCalculatePrecision / 100D * 2D;
+                    //Nn.Lr = ((double)StepsToCalculatePrecision - (double)Correct) / (double)StepsToCalculatePrecision / 100D * 2D;
 
                     Correct = 0;
                 }

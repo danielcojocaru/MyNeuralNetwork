@@ -212,6 +212,7 @@ namespace NeuralNetworkNew.Body
         {
             return Math.Max(0, input);
         }
+
         public void Create(NeuralNetworkCls parent, int[] nrOfNeuronsList, int index)
         {
             Create(parent, nrOfNeuronsList, index, null);
@@ -408,6 +409,5 @@ namespace NeuralNetworkNew.Body
             }
             return toReturn;
         }
-
     }
 }

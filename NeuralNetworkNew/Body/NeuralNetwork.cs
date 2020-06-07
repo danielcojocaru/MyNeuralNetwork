@@ -28,7 +28,7 @@ namespace NeuralNetworkNew.Body
         public List<Matrix<double>> Errors { get; set; } = new List<Matrix<double>>();
         public Matrix<double> LastGeneralizedError { get; set; }
 
-        public double Lr { get; set; } = 0.01;
+        public double Lr { get; set; } = 0.0001;
 
         public bool IsExcelTest { get; set; }
 
@@ -227,8 +227,5 @@ namespace NeuralNetworkNew.Body
 
             return error;
         }
-
-        
-
     }
 }

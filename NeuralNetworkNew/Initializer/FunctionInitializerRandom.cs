@@ -24,7 +24,8 @@ namespace NeuralNetworkNew.Initializer
             }
             else if (index == 1 || index == 2)
             {
-                return ResultEnum.Sigmoid;
+                return ResultEnum.Relu;
+                //return ResultEnum.Sigmoid;
             }
             else
             {
